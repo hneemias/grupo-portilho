@@ -1,17 +1,17 @@
 "use client";
 
 import React, { useState, FormEvent, useEffect } from 'react';
-import { 
-  ChevronRight, 
-  ChevronLeft, 
-  MoveRight, 
-  Phone, 
-  Mail, 
-  MapPin, 
-  Maximize, 
-  X, 
-  Star, 
-  Cpu, 
+import {
+  ChevronRight,
+  ChevronLeft,
+  MoveRight,
+  Phone,
+  Mail,
+  MapPin,
+  Maximize,
+  X,
+  Star,
+  Cpu,
   ArrowRight,
   Image as ImageIcon,
   Leaf,
@@ -170,7 +170,7 @@ export default function Home() {
     if (!lightboxOpen || albuns.length === 0) return;
     const albumAtual = albuns[activeAlbumIndex];
     const fotos = albumAtual?.gp_galeria || [];
-    
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight') {
         setLightboxIndex(prev => prev === fotos.length - 1 ? 0 : prev + 1);
@@ -229,7 +229,7 @@ export default function Home() {
         {/* Background Image: Imposing Sunset / Harvesters / Cinemático */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/assets/img/portilho-0025.jpg"
+            src="/assets/img/Portilho-0025.jpg"
             alt="Grupo Portilho Agro background"
             className="w-full h-full object-cover transform scale-105 motion-safe:animate-[pulse_10s_ease-in-out_infinite]"
           />
@@ -543,9 +543,9 @@ export default function Home() {
                 <p className="text-[#051c36]/70 leading-relaxed mb-8 font-medium">
                   Destaque nacional na mídia especializada pela adoção de **Inteligência Artificial na mitigação de riscos agrícolas**, garantindo segurança operacional mesmo sob variações climáticas extremas.
                 </p>
-                <a 
-                  href="https://g1.globo.com/economia/agronegocios/noticia/2024/02/12/seguro-rural-parametrico-ganha-espaco-como-alternativa-para-proteger-safra.ghtml" 
-                  target="_blank" 
+                <a
+                  href="https://g1.globo.com/economia/agronegocios/noticia/2024/02/12/seguro-rural-parametrico-ganha-espaco-como-alternativa-para-proteger-safra.ghtml"
+                  target="_blank"
                   className="inline-flex items-center gap-3 text-[#051c36] font-black uppercase text-xs tracking-widest hover:gap-5 transition-all"
                 >
                   Ver Matéria Completa <ArrowRight className="w-4 h-4 text-[#a3e635]" />
@@ -587,12 +587,12 @@ export default function Home() {
 
           <div className="flex justify-center gap-8 mb-12 border-b border-white/20 pb-4 w-max mx-auto relative overflow-x-auto max-w-full">
             {albuns.map((album, idx) => (
-              <button 
+              <button
                 key={album.id}
                 onClick={() => {
                   setActiveAlbumIndex(idx);
                   setLightboxIndex(0);
-                }} 
+                }}
                 className={`font-bold text-sm tracking-widest uppercase transition-colors whitespace-nowrap pb-2 border-b-2 ${activeAlbumIndex === idx ? 'text-white border-white' : 'text-white/50 hover:text-white border-transparent'}`}
               >
                 {album.titulo}
@@ -602,7 +602,7 @@ export default function Home() {
 
           <div className="relative group">
             {/* Navigation Buttons */}
-            <button 
+            <button
               onClick={() => {
                 const container = document.getElementById('album-scroll-container');
                 if (container) container.scrollBy({ left: -400, behavior: 'smooth' });
@@ -612,7 +612,7 @@ export default function Home() {
               <ChevronLeft className="w-6 h-6" />
             </button>
 
-            <div 
+            <div
               id="album-scroll-container"
               className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-8 px-4"
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
@@ -637,13 +637,13 @@ export default function Home() {
                   </div>
                 </div>
               ))}
-              
+
               {albuns.length === 0 && (
                 <div className="w-full py-20 text-white/30 font-bold uppercase tracking-widest text-center">Nenhuma foto cadastrada na galeria.</div>
               )}
             </div>
 
-            <button 
+            <button
               onClick={() => {
                 const container = document.getElementById('album-scroll-container');
                 if (container) container.scrollBy({ left: 400, behavior: 'smooth' });
@@ -666,15 +666,15 @@ export default function Home() {
               {(parceiros.length > 0 ? [...parceiros, ...parceiros] : []).map((parceiro, index) => (
                 <div key={`${parceiro.id}-${index}`} className="flex-shrink-0 mx-8 md:mx-16 py-8">
                   <div className="h-16 md:h-24 w-32 md:w-48 bg-white rounded-[1.5rem] p-4 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-500 border border-[#6b7054]/20 group shadow-[0_10px_30px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.1)] hover:-translate-y-2 cursor-pointer">
-                    <img 
-                      src={parceiro.logo_url} 
-                      alt={parceiro.nome} 
-                      className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-500" 
+                    <img
+                      src={parceiro.logo_url}
+                      alt={parceiro.nome}
+                      className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-500"
                     />
                   </div>
                 </div>
               ))}
-              
+
               {parceiros.length === 0 && (
                 <div className="w-full text-[#4d523b]/30 font-bold uppercase tracking-widest text-sm py-4">Carregando parceiros...</div>
               )}

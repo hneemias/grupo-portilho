@@ -77,6 +77,24 @@ export default async function AdminDashboard() {
                     </div>
                     <Link href="/admin/smtp" className="w-full py-3 bg-white/5 hover:bg-white/10 text-white text-center font-bold rounded-xl transition-colors">Configurar SMTP</Link>
                 </div>
+
+                {/* Card: Galeria */}
+                <div className="bg-[#0b2545] border border-[#a3e635]/20 rounded-3xl p-8 shadow-2xl flex flex-col justify-between hover:scale-[1.02] transition-all relative overflow-hidden group">
+                    <div className="relative z-10">
+                        <h3 className="text-2xl font-black mb-2 text-white">Galerias e Álbuns</h3>
+                        <p className="text-white/50 text-sm mb-6">Crie álbuns de eventos, festas de safra e aniversários. Gerencie fotos e capas.</p>
+                    </div>
+                    <Link href="/admin/galeria" className="w-full py-4 bg-[#a3e635] text-[#051c36] text-center font-black rounded-xl relative z-10">Gerenciar Álbuns</Link>
+                </div>
+
+                {/* Card: Parceiros */}
+                <div className="bg-[#051c36] border border-white/5 rounded-3xl p-8 shadow-2xl flex flex-col justify-between hover:border-[#a3e635]/20 transition-colors">
+                    <div>
+                        <h3 className="text-xl font-bold mb-2">Parceiros de Produção</h3>
+                        <p className="text-white/50 text-sm mb-6">Gerencie as logos das empresas parceiras exibidas no site.</p>
+                    </div>
+                    <Link href="/admin/parceiros" className="w-full py-3 bg-white/5 hover:bg-white/10 text-white text-center font-bold rounded-xl transition-colors">Gerenciar Parceiros</Link>
+                </div>
             </div>
         </div>
     )

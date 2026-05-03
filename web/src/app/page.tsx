@@ -1,32 +1,34 @@
 "use client";
 
 import React, { useState, FormEvent, useEffect } from 'react';
-import { Phone, Settings, Maximize, Play, CheckCircle, X, ChevronLeft, ChevronRight, MoveRight, MapPin, Mail } from 'lucide-react';
+import { 
+  ChevronRight, 
+  ChevronLeft, 
+  MoveRight, 
+  Phone, 
+  Mail, 
+  MapPin, 
+  Maximize, 
+  X, 
+  Star, 
+  Cpu, 
+  ArrowRight,
+  Image as ImageIcon,
+  Leaf,
+  Sparkles,
+  Zap,
+  ShieldCheck
+} from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { createClient } from '@/lib/supabase/client';
 import { sendContactMessage } from './actions/contact';
 
 const InteractiveMap = dynamic(() => import('../components/InteractiveMap'), { ssr: false });
 
-type TabKey = 'estrutura' | 'eventos';
-
 export default function Home() {
-  const currentGalleryPhotos = {
-    estrutura: [
-      { src: "/assets/img/silo_facility.png", caption: "Armazenagem Climática de Alta Precisão" },
-      { src: "/assets/img/soybean_harvest.png", caption: "Colheita de Soja Premium" },
-      { src: "/assets/img/logistics_trucks.png", caption: "Gestão Integrada de Logística" },
-      { src: "/assets/img/corn_macro.png", caption: "Seleção Genética e Cuidado no Agronegócio" }
-    ],
-    eventos: [
-      { src: "/assets/img/lucival_portilho.jpg", caption: "Lucival Portilho: O Legado do Fundador" },
-      { src: "/assets/img/logistics_trucks.png", caption: "Frota Moderna em Movimento Contínuo" },
-      { src: "/assets/img/corn_macro.png", caption: "Precisão Agrícola e Resultados" },
-      { src: "/assets/img/silo_facility.png", caption: "Complexo Estrutural Inteligente" }
-    ]
-  };
-
-  const [activeGalleryTab, setActiveGalleryTab] = useState<TabKey>('estrutura');
+  const [activeAlbumIndex, setActiveAlbumIndex] = useState(0);
+  const [albuns, setAlbuns] = useState<any[]>([]);
+  const [parceiros, setParceiros] = useState<any[]>([]);
   const [formSubmitting, setFormSubmitting] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
@@ -45,9 +47,13 @@ export default function Home() {
   ]);
 
   const [mapPins, setMapPins] = useState([
-    { id: 'to', state: 'Cariri, Tocantins', coords: [-11.8906, -49.1558] as [number, number] },
-    { id: 'go', state: 'Edéia, Goiás', coords: [-17.3371, -49.9304] as [number, number] },
-    { id: 'py', state: 'Estância La Amistad, Paraguai', coords: [-23.5, -56.5] as [number, number] }
+    { id: 'cariri', state: 'Fazenda Santo Antônio (Cariri-TO)', coords: [-11.8906, -49.1558] as [number, number] },
+    { id: 'edeia', state: 'Armazém Unidade I (Edéia-GO)', coords: [-17.3371, -49.9304] as [number, number] },
+    { id: 'gurupi', state: 'Fazenda Nova Esperança (Gurupi-TO)', coords: [-11.7297, -49.0678] as [number, number] },
+    { id: 'sucupira', state: 'Fazenda Santa Rosa (Sucupira-TO)', coords: [-11.9934, -48.6186] as [number, number] },
+    { id: 'pium', state: 'Fazenda Vale Verde (Pium-TO)', coords: [-10.4419, -49.1834] as [number, number] },
+    { id: 'caseara', state: 'Fazenda N. Sra. da Guia (Caseara-TO)', coords: [-9.2789, -49.9547] as [number, number] },
+    { id: 'py', state: 'Fazenda La Amistad (Paraguai)', coords: [-23.5, -56.5] as [number, number] }
   ]);
 
   // TESTIMONIALS STATE (Connected to Supabase)
@@ -104,16 +110,19 @@ export default function Home() {
       }
 
       // Fetch Mapa
-      const { data: mapaData } = await supabase
+      const { data, error } = await supabase
         .from('gp_mapa_unidades')
         .select('*');
 
-      if (mapaData && mapaData.length > 0) {
-        setMapPins(mapaData.map(m => ({
-          id: m.id,
-          state: m.nome,
-          coords: [m.latitude, m.longitude] as [number, number]
-        })));
+      if (error) {
+        console.error('Erro ao buscar pins:', error);
+      } else if (data) {
+        const formatted = data.map((item: any) => ({
+          id: item.id,
+          state: item.nome,
+          coords: [item.latitude, item.longitude] as [number, number]
+        }));
+        setMapPins(formatted);
       }
 
       // Fetch Configurações
@@ -126,6 +135,30 @@ export default function Home() {
         configData.forEach(c => configMap[c.chave] = c.valor);
         setConfigs(prev => ({ ...prev, ...configMap }));
       }
+
+      // Fetch Álbuns e Galeria
+      const { data: albunsData } = await supabase
+        .from('gp_albuns')
+        .select(`
+          *,
+          gp_galeria (*)
+        `)
+        .order('created_at', { ascending: false });
+
+      if (albunsData) {
+        setAlbuns(albunsData);
+      }
+
+      // Fetch Parceiros
+      const { data: parceirosData } = await supabase
+        .from('gp_parceiros')
+        .select('*')
+        .eq('is_ativo', true)
+        .order('ordem', { ascending: true });
+
+      if (parceirosData) {
+        setParceiros(parceirosData);
+      }
     };
 
     fetchData();
@@ -133,19 +166,22 @@ export default function Home() {
 
   // LIGHTBOX KEYBOARD NAVIGATION EFFECT
   useEffect(() => {
-    if (!lightboxOpen) return;
+    if (!lightboxOpen || albuns.length === 0) return;
+    const albumAtual = albuns[activeAlbumIndex];
+    const fotos = albumAtual?.gp_galeria || [];
+    
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight') {
-        setLightboxIndex(prev => prev === currentGalleryPhotos[activeGalleryTab].length - 1 ? 0 : prev + 1);
+        setLightboxIndex(prev => prev === fotos.length - 1 ? 0 : prev + 1);
       } else if (e.key === 'ArrowLeft') {
-        setLightboxIndex(prev => prev === 0 ? currentGalleryPhotos[activeGalleryTab].length - 1 : prev - 1);
+        setLightboxIndex(prev => prev === 0 ? fotos.length - 1 : prev - 1);
       } else if (e.key === 'Escape') {
         setLightboxOpen(false);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [lightboxOpen, activeGalleryTab, currentGalleryPhotos]);
+  }, [lightboxOpen, activeAlbumIndex, albuns]);
 
   // Smooth scroll handler function
   const smoothScroll = (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>, id: string) => {
@@ -192,7 +228,7 @@ export default function Home() {
         {/* Background Image: Imposing Sunset / Harvesters / Cinemático */}
         <div className="absolute inset-0 z-0">
           <img
-            src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&q=80&w=2500"
+            src="/assets/img/portilho-0025.jpg"
             alt="Grupo Portilho Agro background"
             className="w-full h-full object-cover transform scale-105 motion-safe:animate-[pulse_10s_ease-in-out_infinite]"
           />
@@ -301,7 +337,7 @@ export default function Home() {
       </section>
 
       {/* SECTION: ÁREAS DE ATUAÇÃO (DATA-DRIVEN) */}
-      <section id="atuacao" className="w-full bg-[#f8f6f0] py-28 px-8 lg:px-16 overflow-hidden relative">
+      <section id="atuacao" className="w-full bg-[#f8f6f0] pt-28 pb-14 px-8 lg:px-16 overflow-hidden relative">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
 
           {/* Left: KPI Grid */}
@@ -329,6 +365,65 @@ export default function Home() {
             </div>
           </div>
 
+        </div>
+      </section>
+
+      {/* SECTION: MODELO DE PRODUÇÃO SUSTENTÁVEL (DADOS DO PDF) */}
+      <section className="w-full bg-[#f8f6f0] pb-28 px-8 lg:px-16 relative">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-[#051c36] rounded-[3rem] p-10 lg:p-20 overflow-hidden relative shadow-2xl">
+            {/* Background pattern */}
+            <div className="absolute top-0 right-0 p-12 text-[#a3e635]/5">
+              <Leaf className="w-64 h-64 rotate-12" />
+            </div>
+
+            <div className="relative z-10 flex flex-col lg:flex-row gap-16 items-center">
+              <div className="flex-1">
+                <div className="inline-flex items-center gap-2 bg-[#a3e635]/10 border border-[#a3e635]/20 px-4 py-2 rounded-full mb-8">
+                  <Sparkles className="w-4 h-4 text-[#a3e635]" />
+                  <span className="text-[#a3e635] font-bold text-xs uppercase tracking-widest">Modelo de Atividade Agrícola</span>
+                </div>
+                <h2 className="text-4xl lg:text-6xl font-plus-jakarta font-black text-white leading-tight mb-8">
+                  O Equilíbrio entre <br />
+                  <span className="text-[#a3e635]">Potência e Natureza.</span>
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="group">
+                    <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#a3e635] mb-4 group-hover:bg-[#a3e635] group-hover:text-[#051c36] transition-all">
+                      <Zap className="w-6 h-6" />
+                    </div>
+                    <h4 className="text-white font-bold text-xl mb-2">Integração ILP</h4>
+                    <p className="text-white/50 text-sm leading-relaxed">Rotação estratégica Lavoura-Pecuária que restaura a saúde do solo e maximiza a produtividade por hectare.</p>
+                  </div>
+                  <div className="group">
+                    <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#a3e635] mb-4 group-hover:bg-[#a3e635] group-hover:text-[#051c36] transition-all">
+                      <ShieldCheck className="w-6 h-6" />
+                    </div>
+                    <h4 className="text-white font-bold text-xl mb-2">Selo REVERTE</h4>
+                    <p className="text-white/50 text-sm leading-relaxed">Em parceria com a Syngenta, aplicamos o programa de agricultura sustentável mais rigoroso do mercado nacional.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Data Cards Table-like Style */}
+              <div className="w-full lg:w-[400px] flex flex-col gap-4">
+                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-[2.5rem] p-8 hover:border-[#a3e635]/40 transition-colors group">
+                  <span className="text-[#a3e635] font-black text-[10px] uppercase tracking-widest block mb-4">Escala de Operação</span>
+                  <div className="flex items-end gap-2">
+                    <span className="text-white text-5xl font-black leading-none">25 MIL</span>
+                    <span className="text-white/40 font-bold mb-1 uppercase text-xs">Hectares</span>
+                  </div>
+                </div>
+                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-[2.5rem] p-8 hover:border-[#a3e635]/40 transition-colors group">
+                  <span className="text-[#a3e635] font-black text-[10px] uppercase tracking-widest block mb-4">Eficiência Média</span>
+                  <div className="flex items-end gap-2">
+                    <span className="text-white text-5xl font-black leading-none">4,22</span>
+                    <span className="text-white/40 font-bold mb-1 uppercase text-xs">Sc/ha Safra</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -363,19 +458,19 @@ export default function Home() {
 
               <div className="space-y-6 text-[#051c36]/70 font-medium leading-relaxed">
                 <p className="text-xl font-bold text-[#051c36]">
-                  O Grupo Portilho é uma empresa consolidada no agronegócio brasileiro, construída sobre uma trajetória de dedicação, coragem e visão de futuro. Desde a sua fundação por Lucival Portilho, o grupo vem se destacando pela forma responsável e estratégica com que conduz suas atividades no campo, sempre alinhando tradição e inovação.
+                  Com uma trajetória de mais de 25 anos no setor, o Grupo Portilho é liderado pelo Eng. Agrônomo Lucival Portilho Arantes, consolidando uma marca de autoridade e inovação no agronegócio brasileiro.
                 </p>
                 <p>
-                  Com atuação voltada à produção agrícola, o Grupo Portilho tem como base a busca contínua por eficiência, sustentabilidade e evolução. Cada safra é tratada como um novo ciclo de oportunidades, onde planejamento, tecnologia e compromisso com a terra caminham lado a lado para garantir resultados consistentes e responsáveis.
+                  O período entre 1999 e 2016 foi fundamental para a fundação dos valores do grupo. Foi uma fase de intensa imersão técnica e acadêmica, onde Lucival Portilho acumulou expertise através de especializações em Proteção de Plantas (UFV), Gestão e Vendas (FGV) e cargos de alta diretoria em multinacionais líderes como a Syngenta.
                 </p>
                 <p>
-                  Mais do que produzir, o grupo acredita em cultivar valores. A fé, o trabalho e o propósito são pilares que orientam decisões e fortalecem a cultura da empresa. Esse conjunto de princípios se reflete no cuidado com as pessoas, no respeito ao meio ambiente e na responsabilidade com as futuras gerações.
+                  Essa base sólida de conhecimento permitiu que em 2016 o grupo iniciasse sua operação própria com um diferencial competitivo raro: a união da experiência prática de campo com a visão estratégica de mercado global.
                 </p>
                 <p>
-                  A adoção de práticas sustentáveis e regenerativas reforça o compromisso do Grupo Portilho com um agronegócio moderno, consciente e preparado para os desafios do amanhã. Investindo constantemente em inovação e gestão eficiente, a empresa busca não apenas crescer, mas evoluir de forma equilibrada e duradoura.
+                  Hoje, essa evolução se manifesta no uso de biotecnologia e gestão baseada em dados, mantendo o compromisso de produzir alimentos com responsabilidade social e ambiental, respeitando o ciclo da natureza e preparando o solo para as próximas gerações.
                 </p>
                 <p className="border-l-4 border-[#a3e635] pl-6 py-2 text-lg font-bold text-[#051c36]">
-                  No Grupo Portilho, cada hectare cultivado carrega mais do que produção: carrega história, dedicação e a certeza de que o futuro se constrói com responsabilidade, união e amor pelo campo.
+                  Unimos o rigor científico à paixão pela terra, transformando conhecimento em produtividade sustentável para o Brasil.
                 </p>
               </div>
             </div>
@@ -420,60 +515,169 @@ export default function Home() {
         </div>
       </section>
 
+      {/* SECTION: INOVAÇÃO & VISÃO 2026 (DADOS DO PDF) */}
+      <section className="w-full bg-[#f8f6f0] pb-28 px-8 lg:px-16">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+            <div className="max-w-2xl">
+              <span className="text-[#6b7054] font-bold tracking-widest uppercase text-xs mb-4 block">Inovação e Tecnologia</span>
+              <h2 className="text-4xl lg:text-5xl font-plus-jakarta font-black text-[#051c36]">
+                Conectando aos <span className="text-[#6b7054]">Avanços Tecnológicos.</span>
+              </h2>
+            </div>
+            <div className="flex items-center gap-2 bg-[#051c36] text-white px-6 py-3 rounded-2xl shadow-xl">
+              <Cpu className="w-5 h-5 text-[#a3e635]" />
+              <span className="font-bold text-sm tracking-wide">Evolução Constante</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Card IA */}
+            <div className="group relative bg-white rounded-[2.5rem] p-10 lg:p-12 overflow-hidden border border-[#6b7054]/10 shadow-[0_10px_40px_rgba(0,0,0,0.03)] hover:shadow-2xl transition-all duration-500">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#a3e635] opacity-[0.05] -mr-16 -mt-16 rounded-full group-hover:scale-[3] transition-transform duration-700" />
+              <div className="relative z-10">
+                <h3 className="text-3xl font-black text-[#051c36] mb-6 flex items-center gap-4">
+                  IA & Risco <div className="h-[2px] flex-1 bg-[#6b7054]/10" />
+                </h3>
+                <p className="text-[#051c36]/70 leading-relaxed mb-8 font-medium">
+                  Destaque nacional na mídia especializada pela adoção de **Inteligência Artificial na mitigação de riscos agrícolas**, garantindo segurança operacional mesmo sob variações climáticas extremas.
+                </p>
+                <a 
+                  href="https://g1.globo.com/economia/agronegocios/noticia/2024/02/12/seguro-rural-parametrico-ganha-espaco-como-alternativa-para-proteger-safra.ghtml" 
+                  target="_blank" 
+                  className="inline-flex items-center gap-3 text-[#051c36] font-black uppercase text-xs tracking-widest hover:gap-5 transition-all"
+                >
+                  Ver Matéria Completa <ArrowRight className="w-4 h-4 text-[#a3e635]" />
+                </a>
+              </div>
+            </div>
+
+            {/* Card Expansão 2026 */}
+            <div className="group relative bg-[#051c36] rounded-[2.5rem] p-10 lg:p-12 overflow-hidden text-white shadow-2xl transition-all duration-500">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-[0.03] -mr-16 -mt-16 rounded-full group-hover:scale-[3] transition-transform duration-700" />
+              <div className="relative z-10">
+                <span className="bg-[#a3e635]/10 text-[#a3e635] px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border border-[#a3e635]/20 mb-6 inline-block">
+                  Projeção 2026
+                </span>
+                <h3 className="text-3xl font-black text-white mb-6">Verticalização Algodoeira</h3>
+                <p className="text-white/60 leading-relaxed mb-8 font-medium">
+                  Início do processamento em Gurupi-TO, com tecnologia de ponta para classificação de fibras por resistência, comprimento e resiliência, fechando o ciclo produtivo com excelência.
+                </p>
+                <div className="flex gap-4">
+                  <div className="flex-1 bg-white/5 rounded-2xl p-4 border border-white/10">
+                    <span className="block text-[#a3e635] font-black text-xl mb-1">Unid. II</span>
+                    <span className="text-[10px] uppercase font-bold text-white/40">240 mil sacas</span>
+                  </div>
+                  <div className="flex-1 bg-white/5 rounded-2xl p-4 border border-white/10">
+                    <span className="block text-white font-black text-xl mb-1">Gurupi</span>
+                    <span className="text-[10px] uppercase font-bold text-white/40">Hub Logístico</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* NOSSA GALERIA COM LIGHTBOX (AUTO-GRID) */}
       <section id="galeria" className="w-full bg-[#a3b174] py-24 px-8 lg:px-16 text-center text-white">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-4xl lg:text-5xl font-plus-jakarta font-medium mb-12">Nossa <strong className="font-black">galeria</strong></h2>
 
-          <div className="flex justify-center gap-8 mb-12 border-b border-white/20 pb-4 w-max mx-auto relative">
-            <div className={`absolute bottom-0 h-[3px] bg-white rounded-full transition-all duration-300 ${activeGalleryTab === 'estrutura' ? 'left-0 w-20' : 'left-[112px] w-[75px]'}`}></div>
-            <button onClick={() => setActiveGalleryTab('estrutura')} className={`font-bold text-sm tracking-widest uppercase transition-colors ${activeGalleryTab === 'estrutura' ? 'text-white' : 'text-white/50 hover:text-white'}`}>Estrutura</button>
-            <button onClick={() => setActiveGalleryTab('eventos')} className={`font-bold text-sm tracking-widest uppercase transition-colors ${activeGalleryTab === 'eventos' ? 'text-white' : 'text-white/50 hover:text-white'}`}>Eventos</button>
+          <div className="flex justify-center gap-8 mb-12 border-b border-white/20 pb-4 w-max mx-auto relative overflow-x-auto max-w-full">
+            {albuns.map((album, idx) => (
+              <button 
+                key={album.id}
+                onClick={() => {
+                  setActiveAlbumIndex(idx);
+                  setLightboxIndex(0);
+                }} 
+                className={`font-bold text-sm tracking-widest uppercase transition-colors whitespace-nowrap pb-2 border-b-2 ${activeAlbumIndex === idx ? 'text-white border-white' : 'text-white/50 hover:text-white border-transparent'}`}
+              >
+                {album.titulo}
+              </button>
+            ))}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 transition-opacity duration-300">
-            {currentGalleryPhotos[activeGalleryTab].map((item, i) => (
-              <div
-                key={`${activeGalleryTab}-${i}`}
-                className="group relative h-[300px] rounded-3xl overflow-hidden shadow-[0_10px_30px_rgba(5,28,54,0.08)] cursor-pointer hover:-translate-y-2 transition-all duration-300"
-                onClick={() => { setLightboxIndex(i); setLightboxOpen(true); }}
-              >
-                <img src={item.src} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={item.caption} />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#051c36]/90 via-[#051c36]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-left">
-                  <h4 className="text-white font-bold text-lg leading-tight mb-2 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">{item.caption}</h4>
-                  <span className="text-[#a3e635] font-bold tracking-widest text-[10px] uppercase flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200">
-                    <Maximize className="w-4 h-4" /> Ampliar Imagem
-                  </span>
+          <div className="relative group">
+            {/* Navigation Buttons */}
+            <button 
+              onClick={() => {
+                const container = document.getElementById('album-scroll-container');
+                if (container) container.scrollBy({ left: -400, behavior: 'smooth' });
+              }}
+              className="absolute -left-4 lg:-left-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-[#051c36] text-white rounded-full flex items-center justify-center shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity border border-white/10 hover:bg-[#a3e635] hover:text-[#051c36]"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+
+            <div 
+              id="album-scroll-container"
+              className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-8 px-4"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {albuns.length > 0 && albuns[activeAlbumIndex]?.gp_galeria?.map((item: any, i: number) => (
+                <div
+                  key={item.id}
+                  className="flex-shrink-0 w-[200px] md:w-[240px] snap-center group/card relative h-[150px] md:h-[180px] rounded-[1.5rem] overflow-hidden shadow-xl cursor-pointer hover:-translate-y-2 transition-all duration-300"
+                  onClick={() => { setLightboxIndex(i); setLightboxOpen(true); }}
+                >
+                  <img src={item.url} className="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-700" alt={item.legenda} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#051c36]/90 via-[#051c36]/20 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-left">
+                    <h4 className="text-white font-bold text-sm leading-tight mb-1 opacity-0 group-hover/card:opacity-100 translate-y-4 group-hover/card:translate-y-0 transition-all duration-500 delay-100">{item.legenda}</h4>
+                    <span className="text-[#a3e635] font-bold tracking-widest text-[8px] uppercase flex items-center gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 delay-200">
+                      <Maximize className="w-3 h-3" /> Ampliar
+                    </span>
+                    {item.is_capa && (
+                      <div className="absolute top-4 right-4 bg-[#a3e635] text-[#051c36] p-1.5 rounded-full shadow-lg">
+                        <Star className="w-2.5 h-2.5 fill-current" />
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+              
+              {albuns.length === 0 && (
+                <div className="w-full py-20 text-white/30 font-bold uppercase tracking-widest text-center">Nenhuma foto cadastrada na galeria.</div>
+              )}
+            </div>
+
+            <button 
+              onClick={() => {
+                const container = document.getElementById('album-scroll-container');
+                if (container) container.scrollBy({ left: 400, behavior: 'smooth' });
+              }}
+              className="absolute -right-4 lg:-right-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-[#051c36] text-white rounded-full flex items-center justify-center shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity border border-white/10 hover:bg-[#a3e635] hover:text-[#051c36]"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
           </div>
         </div>
       </section>
 
-      {/* NOSSOS PARCEIROS */}
-      <section id="parceiros" className="w-full bg-[#f8f6f0] py-24 px-8 lg:px-16 text-center shadow-[inset_0_10px_30px_rgba(0,0,0,0.02)]">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl lg:text-5xl font-plus-jakarta font-medium mb-16 text-[#4d523b]">Nossos <strong className="font-black text-[#6b7054]">parceiros</strong></h2>
+      {/* NOSSOS PARCEIROS DE PRODUÇÃO */}
+      <section id="parceiros" className="w-full bg-[#f8f6f0] py-24 px-8 lg:px-16 text-center shadow-[inset_0_10px_30px_rgba(0,0,0,0.02)] overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl lg:text-5xl font-plus-jakarta font-medium mb-16 text-[#4d523b]">Parceiros de <strong className="font-black text-[#6b7054]">produção</strong></h2>
 
-          <div className="flex items-center justify-center gap-8 lg:gap-16">
-            <ChevronRight className="w-8 h-8 text-[#a3b174] rotate-180 cursor-pointer hover:scale-110 transition-transform" />
-            <div className="flex items-center gap-12 lg:gap-24 overflow-hidden py-4">
-              <div className="w-40 h-20 bg-white rounded-xl shadow-sm border border-[#6b7054]/10 flex items-center justify-center p-4 filter grayscale hover:grayscale-0 transition-all cursor-pointer">
-                <span className="font-black text-[#002d79] text-xl">CMOC</span>
-              </div>
-              <div className="w-40 h-20 bg-white rounded-xl shadow-sm border border-[#6b7054]/10 flex items-center justify-center p-4 filter grayscale hover:grayscale-0 transition-all cursor-pointer">
-                <span className="font-black text-green-700 text-xl italic tracking-tighter">Mosaic</span>
-              </div>
-              <div className="w-40 h-20 bg-white rounded-xl shadow-sm border border-[#6b7054]/10 flex items-center justify-center p-4 filter grayscale hover:grayscale-0 transition-all cursor-pointer">
-                <div className="w-8 h-8 rounded-full bg-green-500 mr-2 flex items-center justify-center text-white font-bold text-xs">✩</div>
-                <span className="font-black text-green-600">OCP</span>
-              </div>
-              <div className="w-40 h-20 bg-white rounded-xl shadow-sm border border-[#6b7054]/10 flex items-center justify-center p-4 filter grayscale hover:grayscale-0 transition-all cursor-pointer">
-                <span className="font-black text-[#002d79] text-xl">CMOC</span>
-              </div>
+          <div className="relative flex overflow-x-hidden">
+            <div className="flex animate-scroll whitespace-nowrap">
+              {(parceiros.length > 0 ? [...parceiros, ...parceiros] : []).map((parceiro, index) => (
+                <div key={`${parceiro.id}-${index}`} className="flex-shrink-0 mx-8 md:mx-16 py-8">
+                  <div className="h-16 md:h-24 w-32 md:w-48 bg-white rounded-[1.5rem] p-4 flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-500 border border-[#6b7054]/20 group shadow-[0_10px_30px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.1)] hover:-translate-y-2 cursor-pointer">
+                    <img 
+                      src={parceiro.logo_url} 
+                      alt={parceiro.nome} 
+                      className="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-500" 
+                    />
+                  </div>
+                </div>
+              ))}
+              
+              {parceiros.length === 0 && (
+                <div className="w-full text-[#4d523b]/30 font-bold uppercase tracking-widest text-sm py-4">Carregando parceiros...</div>
+              )}
             </div>
-            <ChevronRight className="w-8 h-8 text-[#a3b174] cursor-pointer hover:scale-110 transition-transform" />
           </div>
         </div>
       </section>
@@ -665,7 +869,7 @@ export default function Home() {
       </a>
 
       {/* LIGHTBOX MODAL (UI PRO MAX) */}
-      {lightboxOpen && (
+      {lightboxOpen && albuns.length > 0 && (
         <div className="fixed inset-0 z-[999] flex items-center justify-center bg-[#051c36]/90 backdrop-blur-md animate-[fade-in_0.2s_ease-out]" onClick={() => setLightboxOpen(false)}>
           <button onClick={() => setLightboxOpen(false)} className="absolute top-6 right-6 lg:top-10 lg:right-10 text-white/50 hover:text-white transition-colors z-[1000] bg-black/20 p-3 rounded-full hover:bg-black/50">
             <X className="w-8 h-8" />
@@ -674,7 +878,8 @@ export default function Home() {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setLightboxIndex(prev => prev === 0 ? currentGalleryPhotos[activeGalleryTab].length - 1 : prev - 1)
+              const fotos = albuns[activeAlbumIndex]?.gp_galeria || [];
+              setLightboxIndex(prev => prev === 0 ? fotos.length - 1 : prev - 1)
             }}
             className="absolute left-4 lg:left-12 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-[#a3e635] text-white hover:text-[#051c36] p-4 rounded-full transition-all shadow-2xl z-[1000]"
           >
@@ -682,17 +887,20 @@ export default function Home() {
           </button>
 
           <div className="relative max-w-6xl w-full px-16 lg:px-24 flex justify-center" onClick={(e) => e.stopPropagation()}>
-            <img
-              src={currentGalleryPhotos[activeGalleryTab][lightboxIndex].src}
-              alt={currentGalleryPhotos[activeGalleryTab][lightboxIndex].caption}
-              className="max-h-[85vh] max-w-full object-contain rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.6)] animate-[fade-in-up_0.3s_ease-out] ring-1 ring-white/10"
-            />
+            {albuns[activeAlbumIndex]?.gp_galeria?.[lightboxIndex] && (
+              <img
+                src={albuns[activeAlbumIndex].gp_galeria[lightboxIndex].url}
+                alt={albuns[activeAlbumIndex].gp_galeria[lightboxIndex].legenda}
+                className="max-h-[85vh] max-w-full object-contain rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.6)] animate-[fade-in-up_0.3s_ease-out] ring-1 ring-white/10"
+              />
+            )}
           </div>
 
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setLightboxIndex(prev => prev === currentGalleryPhotos[activeGalleryTab].length - 1 ? 0 : prev + 1)
+              const fotos = albuns[activeAlbumIndex]?.gp_galeria || [];
+              setLightboxIndex(prev => prev === fotos.length - 1 ? 0 : prev + 1)
             }}
             className="absolute right-4 lg:right-12 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-[#a3e635] text-white hover:text-[#051c36] p-4 rounded-full transition-all shadow-2xl z-[1000]"
           >
@@ -701,10 +909,10 @@ export default function Home() {
 
           <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-center w-full max-w-lg px-4">
             <div className="bg-black/40 backdrop-blur text-white/90 font-bold tracking-widest text-sm px-6 py-2 rounded-full border border-white/10 shadow-lg">
-              {lightboxIndex + 1} / {currentGalleryPhotos[activeGalleryTab].length}
+              {lightboxIndex + 1} / {albuns[activeAlbumIndex]?.gp_galeria?.length || 0}
             </div>
             <p className="text-white md:text-lg font-medium drop-shadow-xl animate-[fade-in-up_0.4s_ease-out]">
-              {currentGalleryPhotos[activeGalleryTab][lightboxIndex].caption}
+              {albuns[activeAlbumIndex]?.gp_galeria?.[lightboxIndex]?.legenda}
             </p>
           </div>
         </div>

@@ -15,6 +15,7 @@ import {
   ArrowRight,
   Image as ImageIcon,
   Leaf,
+  CheckCircle2,
   Sparkles,
   Zap,
   ShieldCheck
@@ -216,7 +217,7 @@ export default function Home() {
       {/* TOAST SYSTEM (USER RULE #2: ALWAYS USE TOAST NOT ALERT) */}
       {toastMsg && (
         <div className="fixed top-12 left-1/2 -translate-x-1/2 bg-[#031d38] text-[#a3e635] px-6 py-4 rounded-xl shadow-2xl z-[1000] flex items-center gap-3 animate-[fade-in-down_0.3s_ease-out]">
-          <CheckCircle className="w-5 h-5 flex-shrink-0" />
+          <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
           <span className="font-bold text-sm tracking-wide">{toastMsg}</span>
           <button onClick={() => setToastMsg(null)} className="ml-4 hover:opacity-50"><X className="w-4 h-4 text-white" /></button>
         </div>

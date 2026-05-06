@@ -25,7 +25,7 @@ export default function AdminKPIs() {
     }
 
     async function addKPI() {
-        const novo = { valor: "Nova Métrica", label: "0", unidade: "", ordem: kpis.length };
+        const novo = { label: "Nova Métrica", valor: "0", unidade: "", ordem: kpis.length };
         const { data, error } = await supabase.from('gp_kpis').insert([novo]).select();
         if (data) setKpis([...kpis, data[0]]);
     }
@@ -96,8 +96,8 @@ export default function AdminKPIs() {
                                     <label className="text-[10px] uppercase tracking-[0.2em] text-white/20 font-black font-mono">Título / Identificador da Métrica</label>
                                     <input
                                         className="bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-white font-black text-2xl focus:border-secondary focus:bg-white/10 outline-none transition-all placeholder:text-white/5"
-                                        defaultValue={kpi.valor}
-                                        onBlur={(e) => saveKPI(kpi.id, { valor: e.target.value })}
+                                        defaultValue={kpi.label}
+                                        onBlur={(e) => saveKPI(kpi.id, { label: e.target.value })}
                                     />
                                 </div>
                                 
@@ -106,8 +106,8 @@ export default function AdminKPIs() {
                                         <label className="text-[10px] uppercase tracking-[0.2em] text-secondary/40 font-black font-mono">Valor (Número)</label>
                                         <input
                                             className="bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-secondary font-black text-2xl focus:border-secondary focus:bg-secondary/5 outline-none transition-all focus:shadow-glow placeholder:text-secondary/10"
-                                            defaultValue={kpi.label}
-                                            onBlur={(e) => saveKPI(kpi.id, { label: e.target.value })}
+                                            defaultValue={kpi.valor}
+                                            onBlur={(e) => saveKPI(kpi.id, { valor: e.target.value })}
                                         />
                                     </div>
                                     <div className="flex flex-col gap-3">

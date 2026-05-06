@@ -1,7 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { logout } from '../actions'
-import { LogOut, User as UserIcon } from 'lucide-react'
+import { logout, getUserProfile } from '../actions'
+import { LogOut, User as UserIcon, Shield, Users, LayoutDashboard } from 'lucide-react'
+import Link from 'next/link'
 
 export default async function AdminLayout({
     children,
@@ -10,12 +11,15 @@ export default async function AdminLayout({
 }) {
     const supabase = await createClient()
 
-    const {
-        data: { user },
-    } = await supabase.auth.getUser()
-
-    if (!user) {
+    const profile = await getUserProfile()
+    
+    if (!profile) {
         redirect('/admin/login')
+    }
+
+    if (profile.status === 'bloqueado') {
+        await logout()
+        redirect('/admin/login?error=blocked')
     }
 
     return (
@@ -34,18 +38,34 @@ export default async function AdminLayout({
                     {/* User Profile Card */}
                     <div className="hidden md:flex items-center gap-4 bg-white/[0.03] border border-white/5 px-5 py-2.5 rounded-[1.25rem] hover:bg-white/[0.05] transition-all group">
                         <div className="w-9 h-9 rounded-xl bg-secondary/10 flex items-center justify-center border border-secondary/20 shadow-glow group-hover:scale-105 transition-transform">
-                            <span className="text-secondary font-black text-xs font-mono">{user.email?.charAt(0).toUpperCase()}</span>
+                            <span className="text-secondary font-black text-xs font-mono">{profile.email?.charAt(0).toUpperCase()}</span>
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-[9px] uppercase font-black tracking-widest text-white/20 mb-0.5">Operador Autenticado</span>
-                            <span className="text-xs font-bold text-white/70 group-hover:text-white transition-colors tracking-tight">{user.email}</span>
+                            <span className="text-[9px] uppercase font-black tracking-widest text-white/20 mb-0.5">
+                                {profile.role === 'super' ? 'Diretor de Sistemas' : 'Operador Autenticado'}
+                            </span>
+                            <span className="text-xs font-bold text-white/70 group-hover:text-white transition-colors tracking-tight">{profile.email}</span>
                         </div>
+                    </div>
+
+                    <div className="flex items-center gap-1 bg-white/[0.03] border border-white/5 p-1 rounded-2xl">
+                        <Link href="/admin" title="Painel Geral" className="p-3 text-white/40 hover:text-secondary hover:bg-white/5 rounded-xl transition-all">
+                            <LayoutDashboard className="w-5 h-5" />
+                        </Link>
+                        <Link href="/admin/perfil" title="Minha Segurança" className="p-3 text-white/40 hover:text-secondary hover:bg-white/5 rounded-xl transition-all">
+                            <Shield className="w-5 h-5" />
+                        </Link>
+                        {profile.role === 'super' && (
+                            <Link href="/admin/usuarios" title="Gestão de Operadores" className="p-3 text-white/40 hover:text-secondary hover:bg-white/5 rounded-xl transition-all">
+                                <Users className="w-5 h-5" />
+                            </Link>
+                        )}
                     </div>
 
                     <form action={logout}>
                         <button type="submit" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] bg-red-500/5 hover:bg-red-500 text-red-400 hover:text-white px-6 py-3.5 rounded-2xl transition-all border border-red-500/10 hover:border-red-500 shadow-lg group active:scale-95">
                             <LogOut className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                            <span className="hidden sm:inline">Encerrar Sessão</span>
+                            <span className="hidden sm:inline">Sair</span>
                         </button>
                     </form>
                 </div>

@@ -39,14 +39,34 @@ export default function Home() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
+  // Helper to format KPI values professionally
+  const formatKpiValue = (val: string) => {
+    if (!val) return "";
+    // Clean string to extract numeric value (handles formats like "+41k", "16.800", etc.)
+    const numericPart = val.replace(/[^\d.,-]/g, '').replace(',', '.');
+    const num = parseFloat(numericPart);
+    
+    if (isNaN(num)) return val;
+
+    // Use pt-BR for consistent premium formatting (1.234,56)
+    const formatted = new Intl.NumberFormat('pt-BR', {
+      minimumFractionDigits: val.includes('.') || val.includes(',') ? 2 : 0,
+      maximumFractionDigits: 2
+    }).format(num);
+
+    // Re-attach prefixes/suffixes (like + or sc/ha if they were part of the string, though they usually go in 'label')
+    if (val.startsWith('+')) return `+${formatted}`;
+    return formatted;
+  };
+
   // DYNAMIC MAP DATA (Connected to Supabase)
   const [kpis, setKpis] = useState([
-    { valor: "+1.000", titulo: "Clientes Atendidos", label: "", bg: "bg-[#4d523b]" },
-    { valor: "+300 MIL", titulo: "Toneladas Carregadas", label: "", bg: "bg-[#6b7054]" },
-    { valor: "900 T", titulo: "Entregues p/ Dia", label: "", bg: "bg-[#4d523b]" },
-    { valor: "25%", titulo: "Crescimento Ano", label: "2023 x 2022", bg: "bg-[#6b7054]" },
-    { valor: "45%", titulo: "Crescimento", label: "2022 x 2021", bg: "bg-[#4d523b]" },
-    { valor: "7", titulo: "Regiões Logística", label: "Envios", bg: "bg-[#6b7054]" }
+    { valor: "+41 MIL", titulo: "Hectares Operados", label: "Área Total", bg: "bg-[#4d523b]" },
+    { valor: "16.800", titulo: "Hectares no Paraguai", label: "Operação Internacional", bg: "bg-[#6b7054]" },
+    { valor: "7.925", titulo: "Hectares em Pium-TO", label: "Expansão Regional", bg: "bg-[#4d523b]" },
+    { valor: "6.165", titulo: "Hectares em Gurupi", label: "Hub Logístico", bg: "bg-[#6b7054]" },
+    { valor: "2038", titulo: "Segurança Contratual", label: "Operações Garantidas", bg: "bg-[#4d523b]" },
+    { valor: "2.226", titulo: "Hectares Sucupira", label: "Produção Ativa", bg: "bg-[#6b7054]" }
   ]);
 
   const [mapPins, setMapPins] = useState([
@@ -364,7 +384,7 @@ export default function Home() {
             <div className="grid grid-cols-2 md:grid-cols-2 gap-4 lg:gap-6">
               {kpis.map((kpi, idx) => (
                 <div key={idx} className={`${kpi.bg} rounded-3xl p-6 lg:p-8 flex flex-col justify-center items-center text-center shadow-lg hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 border border-white/5`}>
-                  <h3 className="text-3xl lg:text-4xl font-black text-secondary mb-2 drop-shadow-md">{kpi.valor}</h3>
+                  <h3 className="text-3xl lg:text-4xl font-black text-secondary mb-2 drop-shadow-md">{formatKpiValue(kpi.valor)}</h3>
                   {kpi.label && <span className="text-[#e1e2d7] font-bold text-[9px] tracking-widest uppercase mb-1 opacity-80">{kpi.label}</span>}
                   <p className="text-white font-bold text-sm lg:text-sm uppercase tracking-wide leading-tight">{kpi.titulo}</p>
                 </div>

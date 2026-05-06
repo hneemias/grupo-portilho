@@ -1,56 +1,26 @@
-import { login } from '../actions'
+import LoginForm from './LoginForm'
 
 export default async function LoginPage({ searchParams }: { searchParams: { error?: string } }) {
     const params = await searchParams;
     return (
-        <div className="flex h-screen w-full items-center justify-center bg-[#031428] font-plus-jakarta px-4">
-            <div className="w-full max-w-md p-8 rounded-3xl bg-[#020b1a] shadow-2xl border border-white/5">
+        <div className="flex h-screen w-full items-center justify-center bg-[#031428] font-fira-sans px-4 overflow-hidden relative">
+            {/* Background Effects */}
+            <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
+                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-[150px] animate-pulse" />
+                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-[150px] animate-pulse delay-1000" />
+            </div>
 
-                <div className="flex flex-col items-center mb-8">
-                    <img src="/assets/img/logo_gp.png" alt="Grupo Portilho" className="h-12 w-auto mb-4" />
-                    <p className="text-white/50 text-sm tracking-widest uppercase font-bold text-center">Acesso Corporativo</p>
+            <div className="w-full max-w-md p-10 rounded-[2.5rem] bg-[#020b1a]/80 backdrop-blur-2xl shadow-2xl border border-white/5 relative z-10 scale-in-center">
+                <div className="flex flex-col items-center mb-10">
+                    <img src="/assets/img/logo_gp.png" alt="Grupo Portilho" className="h-16 w-auto mb-6 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]" />
+                    <p className="text-white/40 text-[10px] tracking-[0.5em] uppercase font-black text-center">Ambiente Corporativo</p>
                 </div>
 
-                <form className="animate-in flex-1 flex flex-col w-full justify-center gap-4 text-foreground">
-                    <div className="flex flex-col gap-2">
-                        <label className="text-sm text-white/80 font-bold" htmlFor="email">
-                            Email Institucional
-                        </label>
-                        <input
-                            className="rounded-xl px-4 py-3 bg-white/5 border border-white/10 text-white focus:outline-none focus:border-secondary transition-colors"
-                            name="email"
-                            placeholder="diretoria@grupoportilho.com.br"
-                            required
-                        />
-                    </div>
+                <LoginForm error={params?.error} />
 
-                    <div className="flex flex-col gap-2">
-                        <label className="text-sm text-white/80 font-bold" htmlFor="password">
-                            Chave de Segurança (JWT Auth)
-                        </label>
-                        <input
-                            className="rounded-xl px-4 py-3 bg-white/5 border border-white/10 text-white focus:outline-none focus:border-secondary transition-colors"
-                            type="password"
-                            name="password"
-                            placeholder="••••••••"
-                            required
-                        />
-                    </div>
-
-                    <button
-                        formAction={login}
-                        className="bg-secondary text-primary text-lg font-bold rounded-xl px-4 py-3 mt-4 hover:scale-[1.02] transition-transform"
-                    >
-                        Autenticar Sessão
-                    </button>
-
-                    {params?.error && (
-                        <p className="mt-4 p-4 bg-red-900/40 text-red-400 text-sm text-center border border-red-500/20 rounded-xl">
-                            Erro: Credenciais inválidas ou sem autorização.
-                        </p>
-                    )}
-                </form>
-
+                <div className="mt-12 flex justify-center opacity-30">
+                    <img src="/assets/img/logo_gp_completo.png" alt="Grupo Portilho" className="h-8 w-auto grayscale" />
+                </div>
             </div>
         </div>
     )

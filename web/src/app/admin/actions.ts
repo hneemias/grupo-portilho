@@ -112,3 +112,70 @@ export async function deleteUser(userId: string) {
     revalidatePath('/admin/usuarios')
     return { success: true }
 }
+
+import { UserFormData } from './(dashboard)/usuarios/page'
+
+export async function createUser(data: UserFormData) {
+    const supabase = await createAdminClient()
+    
+    // 1. Verificar permissão
+    const profile = await getUserProfile()
+    if (profile?.role !== 'super') {
+        throw new Error('Acesso negado: Somente super usuários podem cadastrar novos operadores.')
+    }
+
+    // 2. Criar no Auth (Necessita de privilégios de Admin)
+    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+        email: data.email,
+        password: data.password!,
+        email_confirm: true,
+        user_metadata: { role: data.role }
+    })
+
+    if (authError) {
+        console.error('Erro Auth:', authError)
+        return { success: false, error: 'Falha ao criar credenciais. Verifique se a SERVICE_ROLE_KEY está configurada.' }
+    }
+
+    // 3. Criar registro em gp_perfis
+    const { error: profileError } = await supabase
+        .from('gp_perfis')
+        .insert({
+            id: authData.user.id,
+            email: data.email,
+            role: data.role,
+            status: 'ativo'
+        })
+
+    if (profileError) {
+        console.error('Erro Perfil:', profileError)
+        return { success: false, error: 'Credenciais criadas, mas falha ao salvar perfil.' }
+    }
+
+    revalidatePath('/admin/usuarios')
+    return { success: true }
+}
+
+export async function updateUser(userId: string, data: UserFormData) {
+    const supabase = await createClient()
+    
+    // 1. Verificar permissão
+    const profile = await getUserProfile()
+    if (profile?.role !== 'super') {
+        throw new Error('Acesso negado: Somente super usuários podem editar operadores.')
+    }
+
+    // 2. Atualizar em gp_perfis
+    const { error: profileError } = await supabase
+        .from('gp_perfis')
+        .update({
+            role: data.role,
+            status: data.status
+        })
+        .eq('id', userId)
+
+    if (profileError) return { success: false, error: profileError.message }
+
+    revalidatePath('/admin/usuarios')
+    return { success: true }
+}

@@ -813,6 +813,13 @@ export default function Home() {
                       {contato.nome}
                     </h4>
                     
+                    {/* Telefone Visível para leitura */}
+                    <p className="text-[#031d38]/50 text-xs font-black mb-4 tracking-widest">
+                      {contato.telefone.replace(/\D/g, '').replace(/(\d{2})(\d{2})(\d{1})(\d{4})(\d{4})/, '+$1 ($2) $3 $4-$5').replace(/(\d{2})(\d{1})(\d{4})(\d{4})/, '($1) $2 $4-$5')}
+                      {/* Caso o número venha sem o DDI 55, a máscara acima tenta ajustar */}
+                      {contato.telefone.length <= 11 && contato.telefone.replace(/(\d{2})(\d{1})(\d{4})(\d{4})/, '($1) $2 $3-$4')}
+                    </p>
+                    
                     <a 
                       href={`https://wa.me/${contato.telefone.replace(/\D/g, '')}`}
                       target="_blank"

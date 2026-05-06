@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { ArrowLeft, Plus, Trash2, Save, Phone, Loader2, User, Image as ImageIcon, Briefcase } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, Save, Phone, Loader2, User, Image as ImageIcon, Briefcase, Upload, Camera } from 'lucide-react';
 import Link from 'next/link';
 import Toast from '../../components/Toast';
 import ModalConfirm from '../../components/ModalConfirm';
@@ -11,9 +11,13 @@ export default function AdminContatos() {
     const [contatos, setContatos] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [savingId, setSavingId] = useState<string | null>(null);
+    const [uploadingId, setUploadingId] = useState<string | null>(null);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'loading' } | null>(null);
     const [modal, setModal] = useState<{ isOpen: boolean; id: string | null }>({ isOpen: false, id: null });
     
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [currentEditId, setCurrentEditId] = useState<string | null>(null);
+
     const supabase = createClient();
 
     useEffect(() => {
@@ -22,7 +26,7 @@ export default function AdminContatos() {
 
     async function fetchContatos() {
         setLoading(true);
-        const { data, error } = await supabase
+        const { data } = await supabase
             .from('gp_contatos')
             .select('*')
             .order('ordem', { ascending: true });
@@ -47,6 +51,48 @@ export default function AdminContatos() {
         } else if (data) {
             setContatos([...contatos, data[0]]);
             setToast({ message: 'Novo contato adicionado!', type: 'success' });
+        }
+    }
+
+    async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0];
+        if (!file || !currentEditId) return;
+
+        setUploadingId(currentEditId);
+        setToast({ message: 'Fazendo upload da foto...', type: 'loading' });
+
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${currentEditId}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+        const filePath = `fotos-equipe/${fileName}`;
+
+        try {
+            // Upload para o bucket 'media' ou 'contatos' (criaremos se necessário)
+            const { error: uploadError } = await supabase.storage
+                .from('galeria') // Usando o bucket galeria que já existe para simplificar, mas em pasta separada
+                .upload(filePath, file);
+
+            if (uploadError) throw uploadError;
+
+            const { data: { publicUrl } } = supabase.storage
+                .from('galeria')
+                .getPublicUrl(filePath);
+
+            // Atualizar no banco
+            const { error: updateError } = await supabase
+                .from('gp_contatos')
+                .update({ foto_url: publicUrl })
+                .eq('id', currentEditId);
+
+            if (updateError) throw updateError;
+
+            setToast({ message: 'Foto atualizada!', type: 'success' });
+            fetchContatos();
+        } catch (error) {
+            console.error(error);
+            setToast({ message: 'Erro no upload', type: 'error' });
+        } finally {
+            setUploadingId(null);
+            setCurrentEditId(null);
         }
     }
 
@@ -88,6 +134,14 @@ export default function AdminContatos() {
 
     return (
         <div className="animate-fade-in pb-20 mt-8">
+            <input 
+                type="file" 
+                ref={fileInputRef} 
+                className="hidden" 
+                accept="image/*" 
+                onChange={handleFileUpload} 
+            />
+
             <div className="flex items-center justify-between mb-12">
                 <div className="flex items-center gap-4">
                     <Link href="/admin" className="p-2 bg-white/5 hover:bg-white/10 rounded-xl transition-colors">
@@ -120,7 +174,26 @@ export default function AdminContatos() {
                                         <span className="text-[10px] font-black uppercase tracking-widest text-white/20">Sem Foto</span>
                                     </div>
                                 )}
-                                <div className="absolute top-4 left-4 bg-[#a3e635] text-[#051c36] text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">
+                                
+                                {/* Overlay de Upload */}
+                                <div 
+                                    onClick={() => {
+                                        setCurrentEditId(contato.id);
+                                        fileInputRef.current?.click();
+                                    }}
+                                    className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center cursor-pointer backdrop-blur-sm"
+                                >
+                                    {uploadingId === contato.id ? (
+                                        <Loader2 className="w-8 h-8 text-[#a3e635] animate-spin" />
+                                    ) : (
+                                        <>
+                                            <Camera className="w-8 h-8 text-[#a3e635] mb-2" />
+                                            <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Trocar Foto</span>
+                                        </>
+                                    )}
+                                </div>
+
+                                <div className="absolute top-4 left-4 bg-[#a3e635] text-[#051c36] text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest pointer-events-none">
                                     {contato.departamento}
                                 </div>
                             </div>
@@ -164,32 +237,18 @@ export default function AdminContatos() {
                                         </div>
                                     </div>
 
-                                    <div className="flex flex-col gap-1">
-                                        <label className="text-[10px] uppercase tracking-widest text-white/30 font-black">URL da Foto</label>
-                                        <div className="relative">
-                                            <input
-                                                id={`url-${contato.id}`}
-                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-10 py-2 text-white/50 text-xs focus:border-[#a3e635] outline-none transition-colors"
-                                                defaultValue={contato.foto_url}
-                                                placeholder="https://..."
-                                            />
-                                            <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
-                                        </div>
-                                    </div>
-
                                     <div className="grid grid-cols-2 gap-3 mt-4">
                                         <button 
                                             onClick={() => {
                                                 const n = (document.getElementById(`nome-${contato.id}`) as HTMLInputElement).value;
                                                 const d = (document.getElementById(`depto-${contato.id}`) as HTMLInputElement).value;
                                                 const t = (document.getElementById(`tel-${contato.id}`) as HTMLInputElement).value;
-                                                const u = (document.getElementById(`url-${contato.id}`) as HTMLInputElement).value;
-                                                handleSave(contato.id, { nome: n, departamento: d, telefone: t, foto_url: u });
+                                                handleSave(contato.id, { nome: n, departamento: d, telefone: t });
                                             }}
                                             className="flex items-center justify-center gap-2 bg-[#a3e635] hover:brightness-110 text-[#051c36] font-black py-3 rounded-xl transition-all text-xs shadow-lg"
                                         >
                                             {savingId === contato.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
-                                            Salvar
+                                            Salvar Dados
                                         </button>
 
                                         <button

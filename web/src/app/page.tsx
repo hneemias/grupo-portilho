@@ -876,9 +876,9 @@ export default function Home() {
           <div className="max-w-xs">
             <div className="flex flex-col mb-4">
               <img
-                src="/assets/img/logo_gp.png"
+                src="/assets/img/logo_gp_completo.png"
                 alt="Grupo Portilho"
-                className="h-12 w-auto object-contain brightness-0 invert opacity-80"
+                className="h-16 w-auto object-contain brightness-0 invert opacity-80"
               />
             </div>
             <p className="text-white/60 text-xs font-medium leading-relaxed mb-4">

@@ -26,13 +26,13 @@ export default function ModalConfirm({
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-[#051c36]/80 backdrop-blur-sm animate-fade-in">
-            <div className="bg-[#051c36] border border-white/10 w-full max-w-md rounded-[2.5rem] p-10 shadow-2xl relative overflow-hidden">
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-primary/80 backdrop-blur-sm animate-fade-in">
+            <div className="bg-primary border border-white/10 w-full max-w-md rounded-[2.5rem] p-10 shadow-2xl relative overflow-hidden">
                 {/* Background Glow */}
-                <div className={`absolute top-0 right-0 w-32 h-32 blur-[80px] opacity-20 rounded-full ${type === 'danger' ? 'bg-red-500' : 'bg-[#a3e635]'}`} />
+                <div className={`absolute top-0 right-0 w-32 h-32 blur-[80px] opacity-20 rounded-full ${type === 'danger' ? 'bg-red-500' : 'bg-secondary'}`} />
                 
                 <div className="relative z-10 flex flex-col items-center text-center">
-                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${type === 'danger' ? 'bg-red-500/10 text-red-400' : 'bg-[#a3e635]/10 text-[#a3e635]'}`}>
+                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${type === 'danger' ? 'bg-red-500/10 text-red-400' : 'bg-secondary/10 text-secondary'}`}>
                         {type === 'danger' ? <AlertTriangle className="w-8 h-8" /> : <X className="w-8 h-8" />}
                     </div>
 
@@ -48,7 +48,7 @@ export default function ModalConfirm({
                         </button>
                         <button
                             onClick={onConfirm}
-                            className={`flex-1 py-4 font-black rounded-2xl transition-all shadow-lg hover:scale-105 ${type === 'danger' ? 'bg-red-500 text-white' : 'bg-[#a3e635] text-[#051c36]'}`}
+                            className={`flex-1 py-4 font-black rounded-2xl transition-all shadow-lg hover:scale-105 ${type === 'danger' ? 'bg-red-500 text-white' : 'bg-secondary text-primary'}`}
                         >
                             {confirmText}
                         </button>

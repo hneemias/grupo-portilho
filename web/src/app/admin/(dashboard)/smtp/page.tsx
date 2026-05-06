@@ -48,7 +48,7 @@ export default function AdminSMTP() {
                 <Link href="/admin" className="p-2 bg-white/5 hover:bg-white/10 rounded-xl transition-colors">
                     <ArrowLeft className="w-5 h-5 text-white/50" />
                 </Link>
-                <h1 className="text-4xl font-black text-white italic tracking-tighter">Configuração <span className="text-[#a3e635]">SMTP</span></h1>
+                <h1 className="text-4xl font-black text-white italic tracking-tighter">Configuração <span className="text-secondary">SMTP</span></h1>
             </div>
 
             <div className="bg-yellow-500/10 border border-yellow-500/20 p-6 rounded-3xl mb-8 flex gap-4 items-start">
@@ -66,12 +66,12 @@ export default function AdminSMTP() {
                     {smtpKeys.map((item) => {
                         const val = configs.find(c => c.chave === item.chave)?.valor || "";
                         return (
-                            <div key={item.chave} className="bg-[#051c36] border border-white/5 p-6 rounded-3xl shadow-xl">
-                                <label className="text-[10px] uppercase tracking-widest text-[#a3e635] font-black mb-2 block">{item.label}</label>
+                            <div key={item.chave} className="bg-primary border border-white/5 p-6 rounded-3xl shadow-xl">
+                                <label className="text-[10px] uppercase tracking-widest text-secondary font-black mb-2 block">{item.label}</label>
                                 <input
                                     type={item.type}
                                     placeholder={item.placeholder}
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#a3e635] outline-none transition-all"
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-secondary outline-none transition-all"
                                     defaultValue={val}
                                     onBlur={(e) => saveConfig(item.chave, e.target.value)}
                                 />
@@ -83,8 +83,8 @@ export default function AdminSMTP() {
 
             <div className="mt-12 p-8 bg-white/5 rounded-3xl border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
-                    <div className="p-4 bg-[#a3e635]/10 rounded-2xl">
-                        <ShieldCheck className="w-8 h-8 text-[#a3e635]" />
+                    <div className="p-4 bg-secondary/10 rounded-2xl">
+                        <ShieldCheck className="w-8 h-8 text-secondary" />
                     </div>
                     <div>
                         <h4 className="text-white font-bold text-xl">Notificações Ativas</h4>
@@ -98,8 +98,8 @@ export default function AdminSMTP() {
 
             {/* TOAST NOTIFICATION */}
             {toastMsg && (
-                <div className="fixed bottom-8 right-8 bg-[#051c36] border border-[#a3e635] text-white px-6 py-4 rounded-2xl shadow-2xl z-[100] animate-fade-in flex items-center gap-3">
-                    <div className="w-2 h-2 bg-[#a3e635] rounded-full animate-pulse" />
+                <div className="fixed bottom-8 right-8 bg-primary border border-secondary text-white px-6 py-4 rounded-2xl shadow-2xl z-[100] animate-fade-in flex items-center gap-3">
+                    <div className="w-2 h-2 bg-secondary rounded-full animate-pulse" />
                     <span className="font-bold text-sm">{toastMsg}</span>
                 </div>
             )}

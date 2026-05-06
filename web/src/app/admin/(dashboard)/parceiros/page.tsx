@@ -87,94 +87,107 @@ export default function AdminParceiros() {
 
     return (
         <div className="animate-fade-in pb-20">
-            <div className="flex items-center justify-between mb-12">
-                <div className="flex items-center gap-4">
-                    <Link href="/admin" className="p-2 bg-white/5 hover:bg-white/10 rounded-xl transition-colors">
-                        <ArrowLeft className="w-5 h-5 text-white/50" />
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 mb-12">
+                <div>
+                    <Link 
+                        href="/admin" 
+                        className="inline-flex items-center gap-2 text-white/30 hover:text-secondary transition-colors mb-6 group/back font-black text-[10px] uppercase tracking-widest"
+                    >
+                        <ArrowLeft className="w-4 h-4 group-hover/back:-translate-x-1 transition-transform" /> Voltar ao Dashboard
                     </Link>
-                    <h1 className="text-3xl font-black text-white">Parceiros de <span className="text-[#a3e635]">Produção</span></h1>
+                    <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight flex items-center gap-4">
+                        Rede de <span className="text-secondary drop-shadow-[0_0_15px_rgba(162,225,37,0.3)]">Parceiros</span>
+                    </h1>
+                    <p className="text-white/40 font-medium mt-2">Gerencie as marcas e empresas que fortalecem o ecossistema Portilho.</p>
                 </div>
 
                 <button
                     onClick={addParceiro}
-                    className="flex items-center gap-2 bg-[#a3e635] text-[#051c36] font-black px-8 py-4 rounded-2xl hover:scale-105 transition-all shadow-lg"
+                    className="flex items-center gap-3 bg-secondary text-primary font-black px-8 py-4 rounded-2xl hover:scale-105 transition-all shadow-glow group"
                 >
-                    <Plus className="w-5 h-5" /> Adicionar Parceiro
+                    <Plus className="w-6 h-6 group-hover:rotate-90 transition-transform duration-300" /> Adicionar Parceiro
                 </button>
             </div>
 
             {loading ? (
-                <div className="text-white/30 font-bold animate-pulse text-center py-20 uppercase tracking-widest">Sincronizando parceiros...</div>
+                <div className="text-white/30 font-black animate-pulse text-center py-20 uppercase tracking-[0.2em] font-mono">Sincronizando Ecossistema...</div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {parceiros.map((parceiro) => (
-                        <div key={parceiro.id} className="group bg-[#041a33] border border-white/10 rounded-[2.5rem] transition-all hover:border-[#a3e635]/40 shadow-xl hover:shadow-[0_0_40px_rgba(0,0,0,0.4)] relative">
-                            {/* Preview da Logo */}
-                            <div className="h-32 relative bg-white flex items-center justify-center p-6 overflow-hidden rounded-t-[2.4rem]">
+                        <div key={parceiro.id} className="group glass-card premium-border rounded-[2.5rem] transition-all duration-300 hover:scale-[1.02] hover:border-secondary/30 shadow-premium relative overflow-hidden flex flex-col h-full">
+                            {/* Preview da Logo - HIGH CONTRAST */}
+                            <div className="h-40 relative bg-white flex items-center justify-center p-8 overflow-hidden rounded-t-[2.4rem] border-b border-white/5">
                                 {parceiro.logo_url ? (
-                                    <img src={parceiro.logo_url} alt={parceiro.nome} className="max-w-full max-h-full object-contain" />
+                                    <img src={parceiro.logo_url} alt={parceiro.nome} className="max-w-full max-h-full object-contain group-hover:scale-110 transition-transform duration-500" />
                                 ) : (
-                                    <div className="flex flex-col items-center justify-center text-black/10">
-                                        <ImageIcon className="w-8 h-8 mb-1" />
-                                        <span className="text-[8px] font-black uppercase tracking-widest text-black/20">Sem Logo</span>
+                                    <div className="flex flex-col items-center justify-center text-black/5">
+                                        <ImageIcon className="w-12 h-12 mb-2" />
+                                        <span className="text-[10px] font-black uppercase tracking-[0.3em] font-mono">Missing Asset</span>
                                     </div>
                                 )}
+                                
+                                <div className="absolute top-4 right-6 bg-primary/5 text-primary/40 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-primary/5">
+                                    {parceiro.categoria || 'PARCEIRO'}
+                                </div>
                             </div>
 
-                            {/* Conteúdo */}
-                            <div className="p-8">
-                                <div className="flex flex-col gap-4">
-                                    <div className="flex flex-col gap-1">
-                                        <label className="text-[10px] uppercase tracking-widest text-white/30 font-black">Nome da Empresa</label>
+                            {/* Conteúdo - CLEAN & TECHNICAL */}
+                            <div className="p-8 flex-1 flex flex-col gap-6">
+                                <div className="flex flex-col gap-5">
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-[10px] uppercase tracking-widest text-white/30 font-black font-mono">Empresa / Instituição</label>
                                         <input
                                             id={`nome-${parceiro.id}`}
-                                            className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white font-bold focus:border-[#a3e635] outline-none text-sm transition-colors"
+                                            className="bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white font-black text-lg focus:border-secondary focus:bg-white/10 outline-none transition-all placeholder:text-white/10"
                                             defaultValue={parceiro.nome}
-                                            placeholder="Ex: John Deere"
+                                            placeholder="Nome oficial..."
                                         />
                                     </div>
 
-                                    <div className="flex flex-col gap-1">
-                                        <label className="text-[10px] uppercase tracking-widest text-white/30 font-black">URL da Logo (PNG/SVG)</label>
-                                        <div className="relative">
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-[10px] uppercase tracking-widest text-white/30 font-black font-mono">Link do Logotipo (Asset URL)</label>
+                                        <div className="relative group/input">
                                             <input
                                                 id={`url-${parceiro.id}`}
-                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white/60 text-xs focus:border-[#a3e635] outline-none transition-colors"
+                                                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white/40 text-[10px] font-mono focus:border-secondary focus:bg-white/10 outline-none transition-all"
                                                 defaultValue={parceiro.logo_url}
-                                                placeholder="https://..."
+                                                placeholder="https://storage.google.com/..."
                                             />
-                                            <LinkIcon className="absolute right-4 top-1/2 -translate-y-1/2 w-3 h-3 text-white/20" />
+                                            <LinkIcon className="absolute right-6 top-1/2 -translate-y-1/2 w-4 h-4 text-white/10 group-focus-within/input:text-secondary transition-colors" />
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div className="grid grid-cols-2 gap-3 mt-2">
-                                        <button 
-                                            onClick={() => {
-                                                const n = (document.getElementById(`nome-${parceiro.id}`) as HTMLInputElement).value;
-                                                const u = (document.getElementById(`url-${parceiro.id}`) as HTMLInputElement).value;
-                                                handleSave(parceiro.id, { nome: n, logo_url: u });
-                                            }}
-                                            className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white font-bold py-2 rounded-xl transition-all border border-white/10 text-xs"
-                                        >
-                                            {savingId === parceiro.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
-                                            Salvar
-                                        </button>
+                                {/* Actions on HOVER */}
+                                <div className="grid grid-cols-2 gap-4 mt-auto opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
+                                    <button 
+                                        onClick={() => {
+                                            const n = (document.getElementById(`nome-${parceiro.id}`) as HTMLInputElement).value;
+                                            const u = (document.getElementById(`url-${parceiro.id}`) as HTMLInputElement).value;
+                                            handleSave(parceiro.id, { nome: n, logo_url: u });
+                                        }}
+                                        className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 text-white/80 font-black py-4 rounded-2xl transition-all border border-white/10 group/save"
+                                    >
+                                        {savingId === parceiro.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4 group-hover/save:text-secondary transition-colors" />}
+                                        Salvar
+                                    </button>
 
-                                        <button
-                                            onClick={() => confirmDelete(parceiro.id)}
-                                            className="flex items-center justify-center gap-2 bg-red-500/5 hover:bg-red-500/10 text-red-400 py-2 rounded-xl transition-all border border-red-500/10 text-xs"
-                                        >
-                                            <Trash2 className="w-3 h-3" /> Excluir
-                                        </button>
-                                    </div>
+                                    <button
+                                        onClick={() => confirmDelete(parceiro.id)}
+                                        className="flex items-center justify-center gap-3 bg-red-500/5 hover:bg-red-500 text-white font-black py-4 rounded-2xl transition-all border border-red-500/10 shadow-lg group/del"
+                                    >
+                                        <Trash2 className="w-4 h-4 group-hover/del:scale-110 transition-transform" /> Excluir
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     ))}
                     
                     {parceiros.length === 0 && !loading && (
-                        <div className="col-span-full text-center py-20 bg-white/5 rounded-[2.5rem] border-2 border-dashed border-white/5">
-                             <p className="text-white/20 font-bold uppercase tracking-widest text-sm">Nenhum parceiro cadastrado.</p>
+                        <div className="col-span-full glass-card rounded-[3rem] p-32 text-center border-2 border-dashed border-white/5">
+                             <ImageIcon className="w-16 h-16 text-white/5 mx-auto mb-6" />
+                             <p className="text-white/20 font-black uppercase tracking-[0.3em] text-sm">Base de Parceiros Vazia</p>
+                             <button onClick={addParceiro} className="mt-6 text-secondary font-bold hover:underline">Iniciar Cadastro</button>
                         </div>
                     )}
                 </div>
@@ -192,11 +205,11 @@ export default function AdminParceiros() {
             <ModalConfirm 
                 isOpen={modal.isOpen}
                 title="Excluir Parceiro?"
-                message="Esta ação removerá a empresa e sua logo da lista de parceiros exibida no site."
+                message="Esta ação removerá a empresa e sua logo da lista de parceiros exibida no site permanentemente."
                 onConfirm={deleteParceiro}
                 onCancel={() => setModal({ isOpen: false, id: null })}
-                confirmText="Sim, Excluir"
-                cancelText="Manter Parceiro"
+                confirmText="Confirmar Exclusão"
+                cancelText="Cancelar"
             />
         </div>
     );

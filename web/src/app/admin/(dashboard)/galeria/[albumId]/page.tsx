@@ -149,31 +149,36 @@ export default function AdminAlbumDetalhe({ params }: { params: Promise<{ albumI
         <div className="animate-fade-in pb-20">
             {/* PROGRESS OVERLAY */}
             {uploading && (
-                <div className="fixed inset-0 bg-[#051c36]/90 backdrop-blur-xl z-[200] flex items-center justify-center p-8">
-                    <div className="w-full max-w-md bg-[#051c36] border border-white/10 rounded-[3rem] p-10 shadow-2xl text-center">
-                        <Loader2 className="w-12 h-12 text-[#a3e635] animate-spin mx-auto mb-6" />
+                <div className="fixed inset-0 bg-primary/90 backdrop-blur-xl z-[200] flex items-center justify-center p-8">
+                    <div className="w-full max-w-md bg-primary border border-white/10 rounded-[3rem] p-10 shadow-2xl text-center">
+                        <Loader2 className="w-12 h-12 text-secondary animate-spin mx-auto mb-6" />
                         <h2 className="text-2xl font-black text-white mb-2">Processando Fotos</h2>
                         <p className="text-white/40 text-sm mb-8">Enviando {progress.current} de {progress.total} arquivos...</p>
                         
                         <div className="w-full h-3 bg-white/5 rounded-full overflow-hidden mb-4">
                             <div 
-                                className="h-full bg-[#a3e635] transition-all duration-300 shadow-[0_0_15px_rgba(163,230,53,0.5)]" 
+                                className="h-full bg-secondary transition-all duration-300 shadow-[0_0_15px_rgba(163,230,53,0.5)]" 
                                 style={{ width: `${progressPercentage}%` }}
                             />
                         </div>
-                        <span className="text-[#a3e635] font-black text-xs uppercase tracking-widest">{Math.round(progressPercentage)}% concluído</span>
+                        <span className="text-secondary font-black text-xs uppercase tracking-widest">{Math.round(progressPercentage)}% concluído</span>
                     </div>
                 </div>
             )}
 
-            <div className="flex items-center justify-between mb-12">
-                <div className="flex items-center gap-4">
-                    <Link href="/admin/galeria" className="p-2 bg-white/5 hover:bg-white/10 rounded-xl transition-colors">
-                        <ArrowLeft className="w-5 h-5 text-white/50" />
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 mb-12">
+                <div>
+                    <Link 
+                        href="/admin/galeria" 
+                        className="inline-flex items-center gap-2 text-white/30 hover:text-secondary transition-colors mb-6 group/back font-black text-[10px] uppercase tracking-widest"
+                    >
+                        <ArrowLeft className="w-4 h-4 group-hover/back:-translate-x-1 transition-transform" /> Voltar para Álbuns
                     </Link>
                     <div>
-                        <h1 className="text-3xl font-black text-white">Álbum: <span className="text-[#a3e635]">{album?.titulo}</span></h1>
-                        <p className="text-white/40 text-sm">{album?.descricao}</p>
+                        <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
+                            Álbum: <span className="text-secondary drop-shadow-[0_0_15px_rgba(162,225,37,0.3)]">{album?.titulo}</span>
+                        </h1>
+                        <p className="text-white/40 font-medium mt-2">{album?.descricao}</p>
                     </div>
                 </div>
 
@@ -182,7 +187,7 @@ export default function AdminAlbumDetalhe({ params }: { params: Promise<{ albumI
                     <button
                         onClick={() => fileInputRef.current?.click()}
                         disabled={uploading}
-                        className="flex items-center gap-2 bg-[#a3e635] text-[#051c36] font-black px-8 py-4 rounded-2xl hover:scale-105 transition-all shadow-lg disabled:opacity-50"
+                        className="flex items-center gap-2 bg-secondary text-primary font-black px-8 py-4 rounded-2xl hover:scale-105 transition-all shadow-lg disabled:opacity-50"
                     >
                         <Upload className="w-5 h-5" />
                         Fazer Upload de Fotos
@@ -195,30 +200,33 @@ export default function AdminAlbumDetalhe({ params }: { params: Promise<{ albumI
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {fotos.map((foto) => (
-                        <div key={foto.id} className={`bg-[#051c36] border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl transition-all group ${foto.is_capa ? 'ring-2 ring-[#a3e635] border-transparent' : ''}`}>
-                            <div className="h-56 relative overflow-hidden bg-black/20">
+                        <div key={foto.id} className={`group glass-card premium-border rounded-[2.5rem] overflow-hidden shadow-premium transition-all duration-300 ${foto.is_capa ? 'ring-2 ring-secondary border-transparent shadow-glow' : 'hover:border-secondary/20'}`}>
+                            <div className="h-64 relative overflow-hidden bg-surface/50">
                                 <img src={foto.url} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
-                                    <a href={foto.url} target="_blank" className="p-3 bg-white/10 hover:bg-white/20 rounded-full text-white backdrop-blur-md">
+                                
+                                {/* Refined Overlay */}
+                                <div className="absolute inset-0 bg-primary/20 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-4">
+                                    <a href={foto.url} target="_blank" className="p-4 bg-black/40 hover:bg-secondary hover:text-primary rounded-2xl text-white backdrop-blur-xl border border-white/10 transition-all hover:scale-110 shadow-lg">
                                         <ExternalLink className="w-5 h-5" />
                                     </a>
-                                    <button onClick={() => deleteFoto(foto)} className="p-3 bg-red-500/20 hover:bg-red-500/40 rounded-full text-red-400 backdrop-blur-md">
+                                    <button onClick={() => deleteFoto(foto)} className="p-4 bg-red-500/20 hover:bg-red-500 text-white rounded-2xl text-red-400 backdrop-blur-xl border border-red-500/20 transition-all hover:scale-110 shadow-lg">
                                         <Trash2 className="w-5 h-5" />
                                     </button>
                                 </div>
+
                                 {foto.is_capa && (
-                                    <div className="absolute top-6 right-6 bg-[#a3e635] text-[#051c36] px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
-                                        Capa Ativa
+                                    <div className="absolute top-6 right-6 bg-secondary text-primary px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-glow animate-pulse">
+                                        Capa do Álbum
                                     </div>
                                 )}
                             </div>
 
-                            <div className="p-6 flex flex-col gap-4">
+                            <div className="p-8 flex flex-col gap-6">
                                 <div className="flex flex-col gap-2">
-                                    <label className="text-[10px] uppercase tracking-widest text-white/30 font-black">Legenda da Foto</label>
+                                    <label className="text-[10px] uppercase tracking-widest text-white/30 font-black font-mono">Metadados / Legenda</label>
                                     <input
-                                        className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:border-[#a3e635] outline-none transition-colors"
-                                        placeholder="Clique para adicionar legenda..."
+                                        className="bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white text-sm font-medium focus:border-secondary focus:bg-white/10 outline-none transition-all placeholder:text-white/10"
+                                        placeholder="Descreva esta imagem..."
                                         defaultValue={foto.legenda}
                                         onBlur={(e) => updateLegenda(foto.id, e.target.value)}
                                     />
@@ -227,9 +235,9 @@ export default function AdminAlbumDetalhe({ params }: { params: Promise<{ albumI
                                 {!foto.is_capa && (
                                     <button
                                         onClick={() => setCapa(foto.id)}
-                                        className="flex items-center justify-center gap-2 w-full py-3 bg-white/5 hover:bg-white/10 text-white/50 hover:text-white rounded-xl text-xs font-black transition-all"
+                                        className="flex items-center justify-center gap-3 w-full py-4 bg-white/5 hover:bg-white/10 text-white/40 hover:text-secondary rounded-2xl text-xs font-black transition-all border border-white/5 group/capa"
                                     >
-                                        <Star className="w-4 h-4" /> Definir como Capa
+                                        <Star className="w-4 h-4 group-hover/capa:fill-secondary" /> Definir como Principal
                                     </button>
                                 )}
                             </div>
@@ -237,18 +245,23 @@ export default function AdminAlbumDetalhe({ params }: { params: Promise<{ albumI
                     ))}
                     
                     {fotos.length === 0 && !uploading && (
-                        <div className="col-span-full text-center py-32 bg-white/[0.02] rounded-[3rem] border-2 border-dashed border-white/5">
-                            <ImageIcon className="w-16 h-16 text-white/5 mx-auto mb-6" />
-                            <p className="text-white/20 font-bold uppercase tracking-widest text-sm">Este álbum ainda está vazio.<br/>Selecione suas fotos no botão acima.</p>
+                        <div className="col-span-full text-center py-40 glass-card rounded-[3rem] border-2 border-dashed border-white/5">
+                            <ImageIcon className="w-20 h-20 text-white/5 mx-auto mb-6" />
+                            <p className="text-white/20 font-black uppercase tracking-[0.2em] text-sm">Base de dados vazia.<br/><span className="text-xs font-medium lowercase tracking-normal">Inicie o upload para popular este álbum.</span></p>
                         </div>
                     )}
                 </div>
             )}
 
             {toastMsg && (
-                <div className="fixed bottom-8 right-8 bg-[#051c36] border border-[#a3e635] text-white px-8 py-5 rounded-3xl shadow-2xl z-[100] animate-fade-in flex items-center gap-4">
-                    {toastMsg.includes('Erro') ? <AlertCircle className="w-5 h-5 text-red-400" /> : <CheckCircle2 className="w-5 h-5 text-[#a3e635]" />}
-                    <span className="font-bold text-sm tracking-wide">{toastMsg}</span>
+                <div className="fixed bottom-8 right-8 glass-card border border-secondary/50 text-white px-10 py-6 rounded-[2rem] shadow-premium z-[100] animate-fade-in flex items-center gap-5 backdrop-blur-2xl">
+                    <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center border border-secondary/20">
+                        {toastMsg.includes('Erro') ? <AlertCircle className="w-6 h-6 text-red-400" /> : <CheckCircle2 className="w-6 h-6 text-secondary" />}
+                    </div>
+                    <div className="flex flex-col">
+                        <span className="text-[10px] uppercase tracking-widest font-black text-secondary/60">Notificação do Sistema</span>
+                        <span className="font-bold text-sm tracking-wide text-white">{toastMsg}</span>
+                    </div>
                 </div>
             )}
         </div>

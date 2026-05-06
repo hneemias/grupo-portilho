@@ -229,7 +229,7 @@ export default function Home() {
 
       {/* TOAST SYSTEM (USER RULE #2: ALWAYS USE TOAST NOT ALERT) */}
       {toastMsg && (
-        <div className="fixed top-12 left-1/2 -translate-x-1/2 bg-[primary] text-[secondary] px-6 py-4 rounded-xl shadow-2xl z-[1000] flex items-center gap-3 animate-[fade-in-down_0.3s_ease-out]">
+        <div className="fixed top-12 left-1/2 -translate-x-1/2 bg-primary text-secondary px-6 py-4 rounded-xl shadow-2xl z-[1000] flex items-center gap-3 animate-[fade-in-down_0.3s_ease-out]">
           <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
           <span className="font-bold text-sm tracking-wide">{toastMsg}</span>
           <button onClick={() => setToastMsg(null)} className="ml-4 hover:opacity-50"><X className="w-4 h-4 text-white" /></button>
@@ -247,12 +247,12 @@ export default function Home() {
             className="w-full h-full object-cover transform scale-105 motion-safe:animate-[pulse_10s_ease-in-out_infinite]"
           />
           {/* Subtle Glowing Tech Ring Effect (Overpowering the competitor) */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-[secondary]/20 rounded-full shadow-[0_0_120px_rgba(163,230,53,0.15)] pointer-events-none" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-[secondary]/30 rounded-full shadow-[0_0_80px_rgba(163,230,53,0.2)] pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-secondary/20 rounded-full shadow-[0_0_120px_rgba(163,230,53,0.15)] pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-secondary/30 rounded-full shadow-[0_0_80px_rgba(163,230,53,0.2)] pointer-events-none" />
 
           {/* Gradients */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[primary]/95 via-[primary]/70 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[primary] via-transparent to-transparent opacity-80" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent opacity-80" />
         </div>
 
         {/* HEADER */}
@@ -270,16 +270,16 @@ export default function Home() {
 
           {/* CENTER: Navigation */}
           <nav className="hidden lg:flex items-center gap-12 font-bold text-white text-[15px] mr-auto pl-16">
-            <a href="#inicio" onClick={(e) => smoothScroll(e, 'inicio')} className="relative after:content-[''] after:absolute after:-bottom-3 after:left-1/2 after:-translate-x-1/2 after:w-1/2 after:h-[3px] after:bg-[secondary] after:rounded-full hover:text-[secondary] transition-colors">Início</a>
-            <a href="#portfolio" onClick={(e) => smoothScroll(e, 'portfolio')} className="hover:text-[secondary] transition-colors">Portfólio & Serviços</a>
-            <a href="#empresa" onClick={(e) => smoothScroll(e, 'empresa')} className="hover:text-[secondary] transition-colors">A Empresa</a>
-            <a href="#galeria" onClick={(e) => smoothScroll(e, 'galeria')} className="hover:text-[secondary] transition-colors">Infraestrutura</a>
-            <a href="#contato" onClick={(e) => smoothScroll(e, 'contato')} className="hover:text-[secondary] transition-colors">Contato</a>
+            <a href="#inicio" onClick={(e) => smoothScroll(e, 'inicio')} className="relative after:content-[''] after:absolute after:-bottom-3 after:left-1/2 after:-translate-x-1/2 after:w-1/2 after:h-[3px] after:bg-secondary after:rounded-full hover:text-secondary transition-colors">Início</a>
+            <a href="#portfolio" onClick={(e) => smoothScroll(e, 'portfolio')} className="hover:text-secondary transition-colors">Portfólio & Serviços</a>
+            <a href="#empresa" onClick={(e) => smoothScroll(e, 'empresa')} className="hover:text-secondary transition-colors">A Empresa</a>
+            <a href="#galeria" onClick={(e) => smoothScroll(e, 'galeria')} className="hover:text-secondary transition-colors">Infraestrutura</a>
+            <a href="#contato" onClick={(e) => smoothScroll(e, 'contato')} className="hover:text-secondary transition-colors">Contato</a>
           </nav>
 
           {/* RIGHT: CTA Button */}
           <div className="hidden lg:block pr-8 lg:pr-16">
-            <button onClick={(e) => smoothScroll(e, 'contato')} className="bg-[secondary] hover:bg-[#84cc16] text-[primary] font-bold px-8 py-3.5 rounded-xl transition-all shadow-[0_0_20px_rgba(163,230,53,0.3)] hover:shadow-[0_0_30px_rgba(163,230,53,0.5)]">
+            <button onClick={(e) => smoothScroll(e, 'contato')} className="bg-secondary hover:bg-[#84cc16] text-primary font-bold px-8 py-3.5 rounded-xl transition-all shadow-[0_0_20px_rgba(163,230,53,0.3)] hover:shadow-[0_0_30px_rgba(163,230,53,0.5)]">
               Fale Conosco
             </button>
           </div>
@@ -289,18 +289,18 @@ export default function Home() {
         <div className="relative z-10 w-full max-w-7xl mx-auto px-8 lg:px-16 flex-1 flex flex-col justify-center pb-20 pt-8">
           <div className="max-w-3xl">
             <div className="flex items-center gap-3 mb-6">
-              <span className="w-12 h-[2px] bg-[secondary]"></span>
-              <span className="text-[secondary] font-bold tracking-widest uppercase text-sm">Agronegócio & Logística</span>
+              <span className="w-12 h-[2px] bg-secondary"></span>
+              <span className="text-secondary font-bold tracking-widest uppercase text-sm">Agronegócio & Logística</span>
             </div>
             <h1 className="text-5xl lg:text-7xl font-plus-jakarta font-black text-white leading-[1.1] drop-shadow-2xl">
-              Nossa Safra é a <br /><span className="text-[secondary]">Força</span> do Futuro.
+              Nossa Safra é a <br /><span className="text-secondary">Força</span> do Futuro.
             </h1>
             <p className="mt-8 text-white/90 text-lg md:text-xl max-w-2xl font-medium leading-relaxed drop-shadow-lg">
               Impulsionando o solo nacional com arquitetura de precisão médica. Do tratamento à base de dados para a sua produção até a exportação nos modais logísticos mais robustos do agronegócio.
             </p>
 
             <div className="mt-12 flex flex-wrap gap-4">
-              <button onClick={(e) => smoothScroll(e, 'portfolio')} className="bg-[secondary] hover:bg-[#84cc16] text-[primary] font-bold px-10 py-4 rounded-xl transition-all shadow-xl hover:scale-105 flex items-center gap-3">
+              <button onClick={(e) => smoothScroll(e, 'portfolio')} className="bg-secondary hover:bg-[#84cc16] text-primary font-bold px-10 py-4 rounded-xl transition-all shadow-xl hover:scale-105 flex items-center gap-3">
                 Explorar Soluções <MoveRight className="w-5 h-5" />
               </button>
             </div>
@@ -314,12 +314,12 @@ export default function Home() {
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg width=\\'60\\' height=\\'60\\' viewBox=\\'0 0 60 60\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cg fill=\\'none\\' fill-rule=\\'evenodd\\'%3E%3Cg fill=\\'%23ffffff\\' fill-opacity=\\'1\\'%3E%3Cpath d=\\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')" }}></div>
 
         {/* Glowing aura center */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[secondary] opacity-[0.05] blur-[100px] rounded-full pointer-events-none"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-secondary opacity-[0.05] blur-[100px] rounded-full pointer-events-none"></div>
 
         <div className="relative z-10 max-w-7xl mx-auto flex flex-col items-center">
           <div className="text-center mb-16">
             <div className="flex justify-center mb-4">
-              <span className="bg-[secondary]/10 text-[secondary] px-4 py-1.5 rounded-full font-bold text-sm tracking-widest uppercase border border-[secondary]/20">Portfólio Premium</span>
+              <span className="bg-secondary/10 text-secondary px-4 py-1.5 rounded-full font-bold text-sm tracking-widest uppercase border border-secondary/20">Portfólio Premium</span>
             </div>
             <h2 className="text-4xl lg:text-5xl font-bold text-white mb-2 font-plus-jakarta">Nosso Domínio Operacional</h2>
             <p className="text-white/60 text-lg max-w-xl font-medium mx-auto">
@@ -334,10 +334,10 @@ export default function Home() {
               { title: "Armazéns", desc: "Controle climático total em silos.", bg: "bg-[#2a2c30]" },
               { title: "Logística", desc: "Frota moderna e inteligência via IA.", bg: "bg-[#1c2229]" }
             ].map((item, idx) => (
-              <div key={idx} className={`${item.bg} rounded-[2.5rem] border border-white/5 hover:border-[secondary]/30 overflow-hidden flex flex-col h-[320px] transition-all duration-300 group cursor-pointer hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]`}>
+              <div key={idx} className={`${item.bg} rounded-[2.5rem] border border-white/5 hover:border-secondary/30 overflow-hidden flex flex-col h-[320px] transition-all duration-300 group cursor-pointer hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]`}>
                 <div className="flex-1 p-8 pb-4 flex flex-col justify-center items-center text-center">
                   <div className="w-20 h-20 rounded-2xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                    <span className="text-5xl text-[secondary] opacity-90 drop-shadow-[0_0_15px_rgba(163,230,53,0.4)]">
+                    <span className="text-5xl text-secondary opacity-90 drop-shadow-[0_0_15px_rgba(163,230,53,0.4)]">
                       {idx === 0 ? "🌱" : idx === 1 ? "🐄" : idx === 2 ? "🏛️" : "🚛"}
                     </span>
                   </div>
@@ -358,13 +358,13 @@ export default function Home() {
           <div className="flex-1 w-full relative z-10">
             <div className="text-center lg:text-left mb-12">
               <h2 className="text-4xl lg:text-5xl font-plus-jakarta font-medium text-[#4d523b]">
-                Áreas de <strong className="font-black text-[primary]">atuação</strong>
+                Áreas de <strong className="font-black text-primary">atuação</strong>
               </h2>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-2 gap-4 lg:gap-6">
               {kpis.map((kpi, idx) => (
                 <div key={idx} className={`${kpi.bg} rounded-3xl p-6 lg:p-8 flex flex-col justify-center items-center text-center shadow-lg hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 border border-white/5`}>
-                  <h3 className="text-3xl lg:text-4xl font-black text-[secondary] mb-2 drop-shadow-md">{kpi.valor}</h3>
+                  <h3 className="text-3xl lg:text-4xl font-black text-secondary mb-2 drop-shadow-md">{kpi.valor}</h3>
                   {kpi.label && <span className="text-[#e1e2d7] font-bold text-[9px] tracking-widest uppercase mb-1 opacity-80">{kpi.label}</span>}
                   <p className="text-white font-bold text-sm lg:text-sm uppercase tracking-wide leading-tight">{kpi.titulo}</p>
                 </div>
@@ -385,32 +385,32 @@ export default function Home() {
       {/* SECTION: MODELO DE PRODUÇÃO SUSTENTÁVEL (DADOS DO PDF) */}
       <section className="w-full bg-[#f8f6f0] pb-28 px-8 lg:px-16 relative">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-[primary] rounded-[3rem] p-10 lg:p-20 overflow-hidden relative shadow-2xl">
+          <div className="bg-primary rounded-[3rem] p-10 lg:p-20 overflow-hidden relative shadow-2xl">
             {/* Background pattern */}
-            <div className="absolute top-0 right-0 p-12 text-[secondary]/5">
+            <div className="absolute top-0 right-0 p-12 text-secondary/5">
               <Leaf className="w-64 h-64 rotate-12" />
             </div>
 
             <div className="relative z-10 flex flex-col lg:flex-row gap-16 items-center">
               <div className="flex-1">
-                <div className="inline-flex items-center gap-2 bg-[secondary]/10 border border-[secondary]/20 px-4 py-2 rounded-full mb-8">
-                  <Sparkles className="w-4 h-4 text-[secondary]" />
-                  <span className="text-[secondary] font-bold text-xs uppercase tracking-widest">Modelo de Atividade Agrícola</span>
+                <div className="inline-flex items-center gap-2 bg-secondary/10 border border-secondary/20 px-4 py-2 rounded-full mb-8">
+                  <Sparkles className="w-4 h-4 text-secondary" />
+                  <span className="text-secondary font-bold text-xs uppercase tracking-widest">Modelo de Atividade Agrícola</span>
                 </div>
                 <h2 className="text-4xl lg:text-6xl font-plus-jakarta font-black text-white leading-tight mb-8">
                   O Equilíbrio entre <br />
-                  <span className="text-[secondary]">Potência e Natureza.</span>
+                  <span className="text-secondary">Potência e Natureza.</span>
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="group">
-                    <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[secondary] mb-4 group-hover:bg-[secondary] group-hover:text-[primary] transition-all">
+                    <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-secondary mb-4 group-hover:bg-secondary group-hover:text-primary transition-all">
                       <Zap className="w-6 h-6" />
                     </div>
                     <h4 className="text-white font-bold text-xl mb-2">Integração ILP</h4>
                     <p className="text-white/50 text-sm leading-relaxed">Rotação estratégica Lavoura-Pecuária que restaura a saúde do solo e maximiza a produtividade por hectare.</p>
                   </div>
                   <div className="group">
-                    <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[secondary] mb-4 group-hover:bg-[secondary] group-hover:text-[primary] transition-all">
+                    <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-secondary mb-4 group-hover:bg-secondary group-hover:text-primary transition-all">
                       <ShieldCheck className="w-6 h-6" />
                     </div>
                     <h4 className="text-white font-bold text-xl mb-2">Selo REVERTE</h4>
@@ -421,15 +421,15 @@ export default function Home() {
 
               {/* Data Cards Table-like Style */}
               <div className="w-full lg:w-[400px] flex flex-col gap-4">
-                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-[2.5rem] p-8 hover:border-[secondary]/40 transition-colors group">
-                  <span className="text-[secondary] font-black text-[10px] uppercase tracking-widest block mb-4">Escala de Operação</span>
+                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-[2.5rem] p-8 hover:border-secondary/40 transition-colors group">
+                  <span className="text-secondary font-black text-[10px] uppercase tracking-widest block mb-4">Escala de Operação</span>
                   <div className="flex items-end gap-2">
                     <span className="text-white text-5xl font-black leading-none">25 MIL</span>
                     <span className="text-white/40 font-bold mb-1 uppercase text-xs">Hectares</span>
                   </div>
                 </div>
-                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-[2.5rem] p-8 hover:border-[secondary]/40 transition-colors group">
-                  <span className="text-[secondary] font-black text-[10px] uppercase tracking-widest block mb-4">Eficiência Média</span>
+                <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-[2.5rem] p-8 hover:border-secondary/40 transition-colors group">
+                  <span className="text-secondary font-black text-[10px] uppercase tracking-widest block mb-4">Eficiência Média</span>
                   <div className="flex items-end gap-2">
                     <span className="text-white text-5xl font-black leading-none">4,22</span>
                     <span className="text-white/40 font-bold mb-1 uppercase text-xs">Sc/ha Safra</span>
@@ -450,28 +450,28 @@ export default function Home() {
           {/* História da Empresa */}
           <div className="flex flex-col lg:flex-row gap-16 mb-24 relative z-10 items-start">
             <div className="flex-1 relative sticky top-12">
-              <div className="absolute -inset-4 bg-gradient-to-tr from-[secondary]/20 to-transparent blur-3xl opacity-60 rounded-full" />
+              <div className="absolute -inset-4 bg-gradient-to-tr from-secondary/20 to-transparent blur-3xl opacity-60 rounded-full" />
               <img
                 src="/assets/img/lucival_portilho.jpg"
                 alt="Lucival Portilho - Fundador"
                 className="w-full h-auto max-h-[700px] rounded-[3rem] object-cover object-top shadow-[0_30px_60px_rgba(0,0,0,0.15)] relative z-10 ring-8 ring-white"
               />
-              <div className="absolute -bottom-6 right-8 bg-[primary] text-white px-8 py-6 rounded-3xl shadow-xl z-20">
-                <span className="block text-[secondary] font-black text-3xl mb-1">+100%</span>
+              <div className="absolute -bottom-6 right-8 bg-primary text-white px-8 py-6 rounded-3xl shadow-xl z-20">
+                <span className="block text-secondary font-black text-3xl mb-1">+100%</span>
                 <span className="text-xs uppercase tracking-widest font-bold">Compromisso</span>
               </div>
             </div>
 
             <div className="flex-[1.5] flex flex-col gap-6">
               <div className="inline-flex mb-2">
-                <span className="bg-[secondary]/10 text-[#6b7054] px-4 py-1.5 rounded-full font-bold text-sm tracking-widest uppercase border border-[secondary]/30">A Empresa</span>
+                <span className="bg-secondary/10 text-[#6b7054] px-4 py-1.5 rounded-full font-bold text-sm tracking-widest uppercase border border-secondary/30">A Empresa</span>
               </div>
-              <h2 className="text-4xl lg:text-5xl font-plus-jakarta font-black text-[primary] mb-4 leading-[1.1]">
+              <h2 className="text-4xl lg:text-5xl font-plus-jakarta font-black text-primary mb-4 leading-[1.1]">
                 Tradição, coragem e <br /> <strong className="text-[#6b7054]">visão de futuro.</strong>
               </h2>
 
-              <div className="space-y-6 text-[primary]/70 font-medium leading-relaxed">
-                <p className="text-xl font-bold text-[primary]">
+              <div className="space-y-6 text-primary/70 font-medium leading-relaxed">
+                <p className="text-xl font-bold text-primary">
                   Com uma trajetória de mais de 25 anos no setor, o Grupo Portilho é liderado pelo Eng. Agrônomo Lucival Portilho Arantes, consolidando uma marca de autoridade e inovação no agronegócio brasileiro.
                 </p>
                 <p>
@@ -483,7 +483,7 @@ export default function Home() {
                 <p>
                   Hoje, essa evolução se manifesta no uso de biotecnologia e gestão baseada em dados, mantendo o compromisso de produzir alimentos com responsabilidade social e ambiental, respeitando o ciclo da natureza e preparando o solo para as próximas gerações.
                 </p>
-                <p className="border-l-4 border-[secondary] pl-6 py-2 text-lg font-bold text-[primary]">
+                <p className="border-l-4 border-secondary pl-6 py-2 text-lg font-bold text-primary">
                   Unimos o rigor científico à paixão pela terra, transformando conhecimento em produtividade sustentável para o Brasil.
                 </p>
               </div>
@@ -494,17 +494,17 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch relative z-10">
             <div className="group relative bg-white rounded-[2.5rem] p-10 lg:p-12 shadow-[0_10px_40px_rgba(5,28,54,0.04)] hover:shadow-[0_20px_60px_rgba(5,28,54,0.08)] transition-all duration-300 overflow-hidden flex flex-col border border-[#6b7054]/10">
               <div className="relative z-10">
-                <span className="text-[11px] font-bold tracking-widest uppercase text-[secondary] mb-2 block">Nosso Caminho</span>
-                <h3 className="text-4xl font-plus-jakarta font-black text-[primary] mb-6">Missão</h3>
-                <p className="text-2xl font-medium text-[primary]/80 leading-relaxed font-inter">
-                  Produzir <strong className="text-[primary]">alimentos</strong> e melhorar a vida das pessoas.
+                <span className="text-[11px] font-bold tracking-widest uppercase text-secondary mb-2 block">Nosso Caminho</span>
+                <h3 className="text-4xl font-plus-jakarta font-black text-primary mb-6">Missão</h3>
+                <p className="text-2xl font-medium text-primary/80 leading-relaxed font-inter">
+                  Produzir <strong className="text-primary">alimentos</strong> e melhorar a vida das pessoas.
                 </p>
               </div>
             </div>
 
-            <div className="group relative bg-[primary] rounded-[2.5rem] p-10 lg:p-12 shadow-[0_10px_40px_rgba(5,28,54,0.1)] hover:shadow-[0_20px_60px_rgba(5,28,54,0.2)] transition-all duration-300 overflow-hidden flex flex-col">
+            <div className="group relative bg-primary rounded-[2.5rem] p-10 lg:p-12 shadow-[0_10px_40px_rgba(5,28,54,0.1)] hover:shadow-[0_20px_60px_rgba(5,28,54,0.2)] transition-all duration-300 overflow-hidden flex flex-col">
               <div className="relative z-10">
-                <span className="text-[11px] font-bold tracking-widest uppercase text-[secondary] mb-2 block">Nosso Horizonte</span>
+                <span className="text-[11px] font-bold tracking-widest uppercase text-secondary mb-2 block">Nosso Horizonte</span>
                 <h3 className="text-4xl font-plus-jakarta font-black text-white mb-6">Visão</h3>
                 <p className="text-lg lg:text-xl font-medium text-white/90 leading-relaxed font-inter">
                   Ser a referência nacional em produtividade de forma sustentável, invadora, viável e ética.
@@ -535,12 +535,12 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div className="max-w-2xl">
               <span className="text-[#6b7054] font-bold tracking-widest uppercase text-xs mb-4 block">Inovação e Tecnologia</span>
-              <h2 className="text-4xl lg:text-5xl font-plus-jakarta font-black text-[primary]">
+              <h2 className="text-4xl lg:text-5xl font-plus-jakarta font-black text-primary">
                 Conectando aos <span className="text-[#6b7054]">Avanços Tecnológicos.</span>
               </h2>
             </div>
-            <div className="flex items-center gap-2 bg-[primary] text-white px-6 py-3 rounded-2xl shadow-xl">
-              <Cpu className="w-5 h-5 text-[secondary]" />
+            <div className="flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-2xl shadow-xl">
+              <Cpu className="w-5 h-5 text-secondary" />
               <span className="font-bold text-sm tracking-wide">Evolução Constante</span>
             </div>
           </div>
@@ -548,43 +548,42 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Card IA */}
             <div className="group relative bg-white rounded-[2.5rem] p-10 lg:p-12 overflow-hidden border border-[#6b7054]/10 shadow-[0_10px_40px_rgba(0,0,0,0.03)] hover:shadow-2xl transition-all duration-500">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[secondary] opacity-[0.05] -mr-16 -mt-16 rounded-full group-hover:scale-[3] transition-transform duration-700" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-secondary opacity-[0.05] -mr-16 -mt-16 rounded-full group-hover:scale-[3] transition-transform duration-700" />
               <div className="relative z-10">
-                <h3 className="text-3xl font-black text-[primary] mb-6 flex items-center gap-4">
-                  IA & Risco <div className="h-[2px] flex-1 bg-[#6b7054]/10" />
+                <h3 className="text-3xl font-black text-primary mb-6 flex items-center gap-4">
+                  Logística & Infra <div className="h-[2px] flex-1 bg-[#6b7054]/10" />
                 </h3>
-                <p className="text-[primary]/70 leading-relaxed mb-8 font-medium">
-                  Destaque nacional na mídia especializada pela adoção de **Inteligência Artificial na mitigação de riscos agrícolas**, garantindo segurança operacional mesmo sob variações climáticas extremas.
+                <p className="text-primary/70 leading-relaxed mb-8 font-medium">
+                  Operação robusta com <b>presença multi-regional</b> (Tocantins e Paraguai), integrando processos logísticos para gestão de vastas áreas produtivas com eficiência e segurança.
                 </p>
-                <a
-                  href="https://g1.globo.com/economia/agronegocios/noticia/2024/02/12/seguro-rural-parametrico-ganha-espaco-como-alternativa-para-proteger-safra.ghtml"
-                  target="_blank"
-                  className="inline-flex items-center gap-3 text-[primary] font-black uppercase text-xs tracking-widest hover:gap-5 transition-all"
+                <button
+                  onClick={() => document.getElementById('atuacao')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="inline-flex items-center gap-3 text-primary font-black uppercase text-xs tracking-widest hover:gap-5 transition-all group"
                 >
-                  Ver Matéria Completa <ArrowRight className="w-4 h-4 text-[secondary]" />
-                </a>
+                  Nossas Unidades <ArrowRight className="w-4 h-4 text-secondary group-hover:translate-x-1 transition-transform" />
+                </button>
               </div>
             </div>
 
-            {/* Card Expansão 2026 */}
-            <div className="group relative bg-[primary] rounded-[2.5rem] p-10 lg:p-12 overflow-hidden text-white shadow-2xl transition-all duration-500">
+            {/* Card Escala */}
+            <div className="group relative bg-primary rounded-[2.5rem] p-10 lg:p-12 overflow-hidden text-white shadow-2xl transition-all duration-500">
               <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-[0.03] -mr-16 -mt-16 rounded-full group-hover:scale-[3] transition-transform duration-700" />
               <div className="relative z-10">
-                <span className="bg-[secondary]/10 text-[secondary] px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border border-[secondary]/20 mb-6 inline-block">
-                  Projeção 2026
+                <span className="bg-secondary/10 text-secondary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border border-secondary/20 mb-6 inline-block">
+                  Destaque Operacional
                 </span>
-                <h3 className="text-3xl font-black text-white mb-6">Verticalização Algodoeira</h3>
+                <h3 className="text-3xl font-black text-white mb-6">Escala e Produtividade</h3>
                 <p className="text-white/60 leading-relaxed mb-8 font-medium">
-                  Início do processamento em Gurupi-TO, com tecnologia de ponta para classificação de fibras por resistência, comprimento e resiliência, fechando o ciclo produtivo com excelência.
+                  Gestão estratégica de mais de <b>41 mil hectares</b> dedicados à produção de <b>Soja e Milho</b>, utilizando tecnologia de sementes e insumos de alta performance para maximizar resultados.
                 </p>
                 <div className="flex gap-4">
                   <div className="flex-1 bg-white/5 rounded-2xl p-4 border border-white/10">
-                    <span className="block text-[secondary] font-black text-xl mb-1">Unid. II</span>
-                    <span className="text-[10px] uppercase font-bold text-white/40">240 mil sacas</span>
+                    <span className="block text-secondary font-black text-xl mb-1">+41k</span>
+                    <span className="text-[10px] uppercase font-bold text-white/40">Hectares Totais</span>
                   </div>
                   <div className="flex-1 bg-white/5 rounded-2xl p-4 border border-white/10">
-                    <span className="block text-white font-black text-xl mb-1">Gurupi</span>
-                    <span className="text-[10px] uppercase font-bold text-white/40">Hub Logístico</span>
+                    <span className="block text-white font-black text-xl mb-1">TO / PY</span>
+                    <span className="text-[10px] uppercase font-bold text-white/40">Eixo de Produção</span>
                   </div>
                 </div>
               </div>
@@ -620,7 +619,7 @@ export default function Home() {
                 const container = document.getElementById('album-scroll-container');
                 if (container) container.scrollBy({ left: -400, behavior: 'smooth' });
               }}
-              className="absolute -left-4 lg:-left-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-[primary] text-white rounded-full flex items-center justify-center shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity border border-white/10 hover:bg-[secondary] hover:text-[primary]"
+              className="absolute -left-4 lg:-left-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity border border-white/10 hover:bg-secondary hover:text-primary"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
@@ -637,13 +636,13 @@ export default function Home() {
                   onClick={() => { setLightboxIndex(i); setLightboxOpen(true); }}
                 >
                   <img src={item.url} className="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-700" alt={item.legenda} />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[primary]/90 via-[primary]/20 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-left">
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 text-left">
                     <h4 className="text-white font-bold text-sm leading-tight mb-1 opacity-0 group-hover/card:opacity-100 translate-y-4 group-hover/card:translate-y-0 transition-all duration-500 delay-100">{item.legenda}</h4>
-                    <span className="text-[secondary] font-bold tracking-widest text-[8px] uppercase flex items-center gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 delay-200">
+                    <span className="text-secondary font-bold tracking-widest text-[8px] uppercase flex items-center gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 delay-200">
                       <Maximize className="w-3 h-3" /> Ampliar
                     </span>
                     {item.is_capa && (
-                      <div className="absolute top-4 right-4 bg-[secondary] text-[primary] p-1.5 rounded-full shadow-lg">
+                      <div className="absolute top-4 right-4 bg-secondary text-primary p-1.5 rounded-full shadow-lg">
                         <Star className="w-2.5 h-2.5 fill-current" />
                       </div>
                     )}
@@ -661,7 +660,7 @@ export default function Home() {
                 const container = document.getElementById('album-scroll-container');
                 if (container) container.scrollBy({ left: 400, behavior: 'smooth' });
               }}
-              className="absolute -right-4 lg:-right-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-[primary] text-white rounded-full flex items-center justify-center shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity border border-white/10 hover:bg-[secondary] hover:text-[primary]"
+              className="absolute -right-4 lg:-right-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity border border-white/10 hover:bg-secondary hover:text-primary"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
@@ -697,20 +696,20 @@ export default function Home() {
       </section>
 
       {/* SECTION: DEPOIMENTOS DE CLIENTES */}
-      <section id="depoimentos" className="w-full bg-[primary] py-28 px-8 lg:px-16 text-center shadow-[inset_0_10px_30px_rgba(0,0,0,0.2)] relative overflow-hidden">
+      <section id="depoimentos" className="w-full bg-primary py-28 px-8 lg:px-16 text-center shadow-[inset_0_10px_30px_rgba(0,0,0,0.2)] relative overflow-hidden">
         {/* Abstract Glow Decoration */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-[secondary] opacity-[0.03] blur-[120px] rounded-full pointer-events-none"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-secondary opacity-[0.03] blur-[120px] rounded-full pointer-events-none"></div>
 
         <div className="max-w-7xl mx-auto relative z-10">
           <h2 className="text-4xl lg:text-5xl font-plus-jakarta font-medium mb-16 text-white">
-            O que dizem <strong className="font-black text-[secondary]">nossos clientes</strong>
+            O que dizem <strong className="font-black text-secondary">nossos clientes</strong>
           </h2>
 
           <div className="flex items-center justify-center gap-4 lg:gap-8 w-full">
             {/* Prev Button */}
             <button
               onClick={() => setTestemunhoIndex(prev => prev === 0 ? testemunhos.length - 1 : prev - 1)}
-              className="w-12 h-12 lg:w-14 lg:h-14 bg-white/5 hover:bg-[secondary] text-white/50 hover:text-[primary] flex justify-center items-center rounded-full transition-all flex-shrink-0"
+              className="w-12 h-12 lg:w-14 lg:h-14 bg-white/5 hover:bg-secondary text-white/50 hover:text-primary flex justify-center items-center rounded-full transition-all flex-shrink-0"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
@@ -723,9 +722,9 @@ export default function Home() {
                 const item = testemunhos[tIndex];
 
                 return (
-                  <div key={`${tIndex}-${offset}`} className="bg-[#031428] border border-white/5 rounded-[2.5rem] p-8 lg:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.3)] w-full max-w-[400px] min-h-[320px] hidden lg:flex flex-col items-center justify-between transition-all duration-500 hover:border-[secondary]/20 first:flex hover:-translate-y-2">
+                  <div key={`${tIndex}-${offset}`} className="bg-[#031428] border border-white/5 rounded-[2.5rem] p-8 lg:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.3)] w-full max-w-[400px] min-h-[320px] hidden lg:flex flex-col items-center justify-between transition-all duration-500 hover:border-secondary/20 first:flex hover:-translate-y-2">
                     <div className="flex w-full items-center gap-4 mb-6">
-                      <img src={item.avatar} alt={item.nome} className="w-16 h-16 rounded-full border-2 border-[secondary] object-cover shadow-[0_0_15px_rgba(163,230,53,0.3)]" />
+                      <img src={item.avatar} alt={item.nome} className="w-16 h-16 rounded-full border-2 border-secondary object-cover shadow-[0_0_15px_rgba(163,230,53,0.3)]" />
                       <div className="text-left flex-1">
                         <h4 className="text-white font-bold font-plus-jakarta text-lg leading-tight">{item.nome}</h4>
                         <p className="text-white/50 text-xs font-medium">{item.papel}</p>
@@ -733,7 +732,7 @@ export default function Home() {
                     </div>
 
                     <div className="flex-1 w-full flex items-start mb-6 relative">
-                      <div className="absolute -left-2 -top-2 text-5xl text-[secondary] opacity-20 font-serif leading-none">"</div>
+                      <div className="absolute -left-2 -top-2 text-5xl text-secondary opacity-20 font-serif leading-none">"</div>
                       <p className="text-white/80 italic text-[15px] leading-relaxed relative z-10 font-serif pt-2">
                         "{item.texto}"
                       </p>
@@ -742,7 +741,7 @@ export default function Home() {
                     {/* Stars */}
                     <div className="flex gap-1.5 w-full">
                       {[...Array(item.estrelas)].map((_, i) => (
-                        <svg key={i} className="w-4 h-4 text-[secondary] fill-current drop-shadow-[0_0_8px_rgba(163,230,53,0.4)]" viewBox="0 0 24 24">
+                        <svg key={i} className="w-4 h-4 text-secondary fill-current drop-shadow-[0_0_8px_rgba(163,230,53,0.4)]" viewBox="0 0 24 24">
                           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                         </svg>
                       ))}
@@ -755,7 +754,7 @@ export default function Home() {
             {/* Next Button */}
             <button
               onClick={() => setTestemunhoIndex(prev => prev === testemunhos.length - 1 ? 0 : prev + 1)}
-              className="w-12 h-12 lg:w-14 lg:h-14 bg-white/5 hover:bg-[secondary] text-white/50 hover:text-[primary] flex justify-center items-center rounded-full transition-all flex-shrink-0"
+              className="w-12 h-12 lg:w-14 lg:h-14 bg-white/5 hover:bg-secondary text-white/50 hover:text-primary flex justify-center items-center rounded-full transition-all flex-shrink-0"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
@@ -766,7 +765,7 @@ export default function Home() {
               <button
                 key={idx}
                 onClick={() => setTestemunhoIndex(idx)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${testemunhoIndex === idx ? 'bg-[secondary] scale-125' : 'bg-white/20 hover:bg-white/40'}`}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${testemunhoIndex === idx ? 'bg-secondary scale-125' : 'bg-white/20 hover:bg-white/40'}`}
               />
             ))}
           </div>
@@ -778,9 +777,9 @@ export default function Home() {
         <section className="w-full bg-[#f8f6f0] py-24 px-8 lg:px-16 overflow-hidden">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
-              <span className="text-[secondary] font-black uppercase tracking-[0.3em] text-[10px] block mb-4">Atendimento Direto</span>
-              <h3 className="text-4xl lg:text-5xl font-black text-[primary] font-plus-jakarta mb-6">Fale com nossos <span className="text-[secondary]">Especialistas</span></h3>
-              <p className="text-[primary]/60 font-medium max-w-2xl mx-auto italic">
+              <span className="text-secondary font-black uppercase tracking-[0.3em] text-[10px] block mb-4">Atendimento Direto</span>
+              <h3 className="text-4xl lg:text-5xl font-black text-primary font-plus-jakarta mb-6">Fale com nossos <span className="text-secondary">Especialistas</span></h3>
+              <p className="text-primary/60 font-medium max-w-2xl mx-auto italic">
                 "Nossa equipe está pronta para oferecer suporte técnico e comercial de alto nível."
               </p>
             </div>
@@ -789,11 +788,11 @@ export default function Home() {
               {contatos.map((contato) => (
                 <div key={contato.id} className="group relative bg-white rounded-[2.5rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_70px_rgba(0,0,0,0.1)] transition-all duration-500 hover:-translate-y-3">
                   {/* Foto com Overlay Gradiente */}
-                  <div className="aspect-[4/5] relative overflow-hidden bg-[primary]">
+                  <div className="aspect-[4/5] relative overflow-hidden bg-primary">
                     {contato.foto_url ? (
-                      <img 
-                        src={contato.foto_url} 
-                        alt={contato.nome} 
+                      <img
+                        src={contato.foto_url}
+                        alt={contato.nome}
                         className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
                       />
                     ) : (
@@ -801,29 +800,29 @@ export default function Home() {
                         <User className="w-20 h-20 text-white/10" />
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[primary] via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
                   </div>
 
                   {/* Informações */}
                   <div className="p-8 text-center relative z-10">
-                    <span className="bg-[secondary]/10 text-[secondary] text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-3 inline-block">
+                    <span className="bg-secondary/10 text-secondary text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-3 inline-block">
                       {contato.departamento}
                     </span>
-                    <h4 className="text-[primary] text-xl font-black mb-1 font-plus-jakarta tracking-tight">
+                    <h4 className="text-primary text-xl font-black mb-1 font-plus-jakarta tracking-tight">
                       {contato.nome}
                     </h4>
-                    
+
                     {/* Telefone Visível para leitura */}
-                    <p className="text-[primary]/50 text-xs font-black mb-4 tracking-widest">
+                    <p className="text-primary/50 text-xs font-black mb-4 tracking-widest">
                       {contato.telefone.replace(/\D/g, '').replace(/(\d{2})(\d{2})(\d{1})(\d{4})(\d{4})/, '+$1 ($2) $3 $4-$5').replace(/(\d{2})(\d{1})(\d{4})(\d{4})/, '($1) $2 $4-$5')}
                       {/* Caso o número venha sem o DDI 55, a máscara acima tenta ajustar */}
                       {contato.telefone.length <= 11 && contato.telefone.replace(/(\d{2})(\d{1})(\d{4})(\d{4})/, '($1) $2 $3-$4')}
                     </p>
-                    
-                    <a 
+
+                    <a
                       href={`https://wa.me/${contato.telefone.replace(/\D/g, '')}`}
                       target="_blank"
-                      className="mt-6 flex items-center justify-center gap-2 bg-[primary] group-hover:bg-[secondary] text-white group-hover:text-[primary] py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-lg"
+                      className="mt-6 flex items-center justify-center gap-2 bg-primary group-hover:bg-secondary text-white group-hover:text-primary py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-lg"
                     >
                       <Phone className="w-4 h-4" /> Falar Agora
                     </a>
@@ -837,32 +836,32 @@ export default function Home() {
 
       {/* SECTION: FORMULÁRIO DE CONTATO */}
       <section id="contato" className="w-full bg-white py-24 px-8 lg:px-16 text-center border-t border-[#f8f6f0] relative z-10 px-4">
-        <div className="max-w-4xl mx-auto bg-[#f8f6f0] rounded-3xl p-8 lg:p-12 shadow-2xl shadow-[primary]/5 border border-black/5">
+        <div className="max-w-4xl mx-auto bg-[#f8f6f0] rounded-3xl p-8 lg:p-12 shadow-2xl shadow-primary/5 border border-black/5">
           <div className="text-center mb-10">
-            <h3 className="text-3xl lg:text-4xl font-black text-[primary] font-plus-jakarta mb-4">O que você precisa <span className="text-[secondary]">hoje?</span></h3>
-            <p className="text-[primary]/60 font-medium">Tem dúvida técnica sobre nossa logística? Fale com um de nossos especialistas abaixo.</p>
+            <h3 className="text-3xl lg:text-4xl font-black text-primary font-plus-jakarta mb-4">O que você precisa <span className="text-secondary">hoje?</span></h3>
+            <p className="text-primary/60 font-medium">Tem dúvida técnica sobre nossa logística? Fale com um de nossos especialistas abaixo.</p>
           </div>
 
           <form onSubmit={handleContactSubmit} className="flex flex-col gap-6 text-left">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="text-[primary] text-sm font-bold mb-2 block">Nome:</label>
-                <input name="nome" required type="text" className="w-full bg-white border border-[primary]/10 text-[primary] p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[secondary] transition-all shadow-sm" placeholder="Seu nome" />
+                <label className="text-primary text-sm font-bold mb-2 block">Nome:</label>
+                <input name="nome" required type="text" className="w-full bg-white border border-primary/10 text-primary p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary transition-all shadow-sm" placeholder="Seu nome" />
               </div>
               <div>
-                <label className="text-[primary] text-sm font-bold mb-2 block">E-mail:</label>
-                <input name="email" required type="email" className="w-full bg-white border border-[primary]/10 text-[primary] p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[secondary] transition-all shadow-sm" placeholder="voce@email.com" />
+                <label className="text-primary text-sm font-bold mb-2 block">E-mail:</label>
+                <input name="email" required type="email" className="w-full bg-white border border-primary/10 text-primary p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary transition-all shadow-sm" placeholder="voce@email.com" />
               </div>
             </div>
             <div>
-              <label className="text-[primary] text-sm font-bold mb-2 block">Assunto:</label>
-              <input name="assunto" required type="text" className="w-full bg-white border border-[primary]/10 text-[primary] p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[secondary] transition-all shadow-sm" placeholder="Motivo do contato" />
+              <label className="text-primary text-sm font-bold mb-2 block">Assunto:</label>
+              <input name="assunto" required type="text" className="w-full bg-white border border-primary/10 text-primary p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary transition-all shadow-sm" placeholder="Motivo do contato" />
             </div>
             <div>
-              <label className="text-[primary] text-sm font-bold mb-2 block">Mensagem:</label>
-              <textarea name="mensagem" required rows={4} className="w-full bg-white border border-[primary]/10 text-[primary] p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[secondary] resize-none transition-all shadow-sm" placeholder="Detalhes..."></textarea>
+              <label className="text-primary text-sm font-bold mb-2 block">Mensagem:</label>
+              <textarea name="mensagem" required rows={4} className="w-full bg-white border border-primary/10 text-primary p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-secondary resize-none transition-all shadow-sm" placeholder="Detalhes..."></textarea>
             </div>
-            <button type="submit" disabled={formSubmitting} className="w-full bg-[primary] hover:bg-[secondary] hover:text-[primary] text-white font-black py-4 rounded-xl transition-colors text-sm uppercase tracking-widest mt-2 shadow-lg hover:shadow-xl disabled:opacity-50 flex items-center justify-center">
+            <button type="submit" disabled={formSubmitting} className="w-full bg-primary hover:bg-secondary hover:text-primary text-white font-black py-4 rounded-xl transition-colors text-sm uppercase tracking-widest mt-2 shadow-lg hover:shadow-xl disabled:opacity-50 flex items-center justify-center">
               {formSubmitting ? 'Enviando...' : 'Enviar Mensagem'}
             </button>
           </form>
@@ -870,7 +869,7 @@ export default function Home() {
       </section>
 
       {/* FOOTER */}
-      <footer className="w-full bg-[primary] py-16 px-8 lg:px-16 relative border-t-8 border-[secondary] z-0">
+      <footer className="w-full bg-primary py-16 px-8 lg:px-16 relative border-t-8 border-secondary z-0">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-12 lg:gap-24">
 
           <div className="max-w-xs">
@@ -885,7 +884,7 @@ export default function Home() {
               Sustentabilidade, potência no agro e inovação. A força de um negócio que respeita a terra do início ao fim.
             </p>
             <div className="flex gap-4">
-              <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center cursor-pointer hover:bg-[secondary] hover:text-[primary] transition-colors"><MoveRight className="w-4 h-4" /></div>
+              <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center cursor-pointer hover:bg-secondary hover:text-primary transition-colors"><MoveRight className="w-4 h-4" /></div>
             </div>
           </div>
 
@@ -894,17 +893,17 @@ export default function Home() {
               <h4 className="text-white font-bold mb-6 font-plus-jakarta tracking-widest text-sm uppercase">Atendimento</h4>
               <ul className="space-y-4 text-white/60 text-sm font-medium">
                 <li className="flex items-start gap-3 group">
-                  <Phone className="w-5 h-5 text-[secondary] flex-shrink-0 group-hover:scale-110 transition-transform" />
+                  <Phone className="w-5 h-5 text-secondary flex-shrink-0 group-hover:scale-110 transition-transform" />
                   <div>
                     <span className="block text-white/90 font-bold mb-0.5">Telefone Comercial</span>
-                    <span className="hover:text-[secondary] cursor-pointer transition-colors">{configs.footer_phone}</span>
+                    <span className="hover:text-secondary cursor-pointer transition-colors">{configs.footer_phone}</span>
                   </div>
                 </li>
                 <li className="flex items-start gap-3 group">
-                  <Mail className="w-5 h-5 text-[secondary] flex-shrink-0 group-hover:scale-110 transition-transform" />
+                  <Mail className="w-5 h-5 text-secondary flex-shrink-0 group-hover:scale-110 transition-transform" />
                   <div>
                     <span className="block text-white/90 font-bold mb-0.5">Atendimento Eletrônico</span>
-                    <span className="hover:text-[secondary] cursor-pointer transition-colors">{configs.footer_email}</span>
+                    <span className="hover:text-secondary cursor-pointer transition-colors">{configs.footer_email}</span>
                   </div>
                 </li>
               </ul>
@@ -914,17 +913,17 @@ export default function Home() {
               <h4 className="text-white font-bold mb-6 font-plus-jakarta tracking-widest text-sm uppercase">Matriz Corporativa</h4>
               <ul className="space-y-4 text-white/60 text-sm font-medium">
                 <li className="flex items-start gap-3 group">
-                  <MapPin className="w-5 h-5 text-[secondary] flex-shrink-0 group-hover:scale-110 transition-transform" />
+                  <MapPin className="w-5 h-5 text-secondary flex-shrink-0 group-hover:scale-110 transition-transform" />
                   <div>
                     <span className="block text-white/90 font-bold mb-0.5">Goiás, Brasil</span>
                     <span className="leading-relaxed whitespace-pre-line">{configs.footer_address}</span>
                   </div>
                 </li>
                 <li className="pt-4 flex items-center gap-4">
-                  <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[secondary] hover:text-[primary] transition-all hover:scale-110">
+                  <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-secondary hover:text-primary transition-all hover:scale-110">
                     <span className="font-bold font-serif italic text-lg leading-none">in</span>
                   </a>
-                  <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[secondary] hover:text-[primary] transition-all hover:scale-110">
+                  <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-secondary hover:text-primary transition-all hover:scale-110">
                     <span className="font-bold text-lg leading-none">IG</span>
                   </a>
                 </li>
@@ -948,7 +947,7 @@ export default function Home() {
 
       {/* LIGHTBOX MODAL (UI PRO MAX) */}
       {lightboxOpen && albuns.length > 0 && (
-        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-[primary]/90 backdrop-blur-md animate-[fade-in_0.2s_ease-out]" onClick={() => setLightboxOpen(false)}>
+        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-primary/90 backdrop-blur-md animate-[fade-in_0.2s_ease-out]" onClick={() => setLightboxOpen(false)}>
           <button onClick={() => setLightboxOpen(false)} className="absolute top-6 right-6 lg:top-10 lg:right-10 text-white/50 hover:text-white transition-colors z-[1000] bg-black/20 p-3 rounded-full hover:bg-black/50">
             <X className="w-8 h-8" />
           </button>
@@ -959,7 +958,7 @@ export default function Home() {
               const fotos = albuns[activeAlbumIndex]?.gp_galeria || [];
               setLightboxIndex(prev => prev === 0 ? fotos.length - 1 : prev - 1)
             }}
-            className="absolute left-4 lg:left-12 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-[secondary] text-white hover:text-[primary] p-4 rounded-full transition-all shadow-2xl z-[1000]"
+            className="absolute left-4 lg:left-12 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-secondary text-white hover:text-primary p-4 rounded-full transition-all shadow-2xl z-[1000]"
           >
             <ChevronLeft className="w-8 h-8" />
           </button>
@@ -980,7 +979,7 @@ export default function Home() {
               const fotos = albuns[activeAlbumIndex]?.gp_galeria || [];
               setLightboxIndex(prev => prev === fotos.length - 1 ? 0 : prev + 1)
             }}
-            className="absolute right-4 lg:right-12 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-[secondary] text-white hover:text-[primary] p-4 rounded-full transition-all shadow-2xl z-[1000]"
+            className="absolute right-4 lg:right-12 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-secondary text-white hover:text-primary p-4 rounded-full transition-all shadow-2xl z-[1000]"
           >
             <ChevronRight className="w-8 h-8" />
           </button>

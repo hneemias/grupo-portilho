@@ -47,7 +47,7 @@ export default function AdminConfig() {
                 <Link href="/admin" className="p-2 bg-white/5 hover:bg-white/10 rounded-xl transition-colors">
                     <ArrowLeft className="w-5 h-5 text-white/50" />
                 </Link>
-                <h1 className="text-3xl font-black text-white">Configurações <span className="text-[#a3e635]">Globais</span></h1>
+                <h1 className="text-3xl font-black text-white">Configurações <span className="text-secondary">Globais</span></h1>
             </div>
 
             <p className="text-white/50 mb-8 max-w-2xl">Ajuste os dados que aparecem no rodapé e nos botões de contato em todo o site.</p>
@@ -59,13 +59,13 @@ export default function AdminConfig() {
                     {expectedKeys.map((item) => {
                         const currentVal = configs.find(c => c.chave === item.chave)?.valor || "";
                         return (
-                            <div key={item.chave} className="bg-[#051c36] border border-white/5 p-8 rounded-3xl shadow-xl flex flex-col gap-4">
-                                <div className="flex items-center gap-3 text-[#a3e635] mb-2">
+                            <div key={item.chave} className="bg-primary border border-white/5 p-8 rounded-3xl shadow-xl flex flex-col gap-4">
+                                <div className="flex items-center gap-3 text-secondary mb-2">
                                     {item.icon}
                                     <label className="text-xs uppercase tracking-widest font-black">{item.label}</label>
                                 </div>
                                 <textarea
-                                    className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#a3e635] outline-none resize-none font-medium text-lg"
+                                    className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-secondary outline-none resize-none font-medium text-lg"
                                     defaultValue={currentVal}
                                     rows={item.chave === 'footer_address' ? 3 : 1}
                                     onBlur={(e) => saveConfig(item.chave, e.target.value)}
@@ -78,8 +78,8 @@ export default function AdminConfig() {
             )}
             {/* TOAST NOTIFICATION */}
             {toastMsg && (
-                <div className="fixed bottom-8 right-8 bg-[#051c36] border border-[#a3e635] text-white px-6 py-4 rounded-2xl shadow-2xl z-[100] animate-fade-in flex items-center gap-3">
-                    <div className="w-2 h-2 bg-[#a3e635] rounded-full animate-pulse" />
+                <div className="fixed bottom-8 right-8 bg-primary border border-secondary text-white px-6 py-4 rounded-2xl shadow-2xl z-[100] animate-fade-in flex items-center gap-3">
+                    <div className="w-2 h-2 bg-secondary rounded-full animate-pulse" />
                     <span className="font-bold text-sm">{toastMsg}</span>
                 </div>
             )}

@@ -146,19 +146,25 @@ export default function AdminContatos() {
                 onChange={handleFileUpload} 
             />
 
-            <div className="flex items-center justify-between mb-12">
-                <div className="flex items-center gap-4">
-                    <Link href="/admin" className="p-2 bg-white/5 hover:bg-white/10 rounded-xl transition-colors">
-                        <ArrowLeft className="w-5 h-5 text-white/50" />
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 mb-12">
+                <div>
+                    <Link 
+                        href="/admin" 
+                        className="inline-flex items-center gap-2 text-white/30 hover:text-secondary transition-colors mb-6 group/back font-black text-[10px] uppercase tracking-widest"
+                    >
+                        <ArrowLeft className="w-4 h-4 group-hover/back:-translate-x-1 transition-transform" /> Voltar ao Dashboard
                     </Link>
-                    <h1 className="text-3xl font-black text-white">Contatos <span className="text-[secondary]">Diretos</span></h1>
+                    <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight flex items-center gap-4">
+                        Gestão de <span className="text-secondary drop-shadow-[0_0_15px_rgba(162,225,37,0.3)]">Especialistas</span>
+                    </h1>
+                    <p className="text-white/40 font-medium mt-2">Administre a equipe de atendimento direto e canais operacionais.</p>
                 </div>
 
                 <button
                     onClick={addContato}
-                    className="flex items-center gap-2 bg-[secondary] text-[primary] font-black px-8 py-4 rounded-2xl hover:scale-105 transition-all shadow-lg"
+                    className="flex items-center gap-3 bg-secondary text-primary font-black px-8 py-4 rounded-2xl hover:scale-105 transition-all shadow-glow group"
                 >
-                    <Plus className="w-5 h-5" /> Adicionar Pessoa
+                    <Plus className="w-6 h-6 group-hover:rotate-90 transition-transform duration-300" /> Adicionar Pessoa
                 </button>
             </div>
 
@@ -167,101 +173,103 @@ export default function AdminContatos() {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {contatos.map((contato) => (
-                        <div key={contato.id} className="group bg-[#041a33] border border-white/10 rounded-[2.5rem] transition-all hover:border-[secondary]/40 shadow-xl hover:shadow-[0_0_40px_rgba(0,0,0,0.4)] relative overflow-hidden">
-                            {/* Preview da Foto */}
-                            <div className="h-48 relative bg-[#0b2545] flex items-center justify-center overflow-hidden">
+                        <div key={contato.id} className="group glass-card premium-border rounded-[2.5rem] transition-all duration-300 hover:scale-[1.02] hover:border-secondary/30 shadow-premium relative overflow-hidden flex flex-col h-full">
+                            {/* Preview da Foto - INDUSTRIAL STYLE */}
+                            <div className="h-64 relative bg-surface/50 flex items-center justify-center overflow-hidden border-b border-white/5">
                                 {contato.foto_url ? (
-                                    <img src={contato.foto_url} alt={contato.nome} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+                                    <img src={contato.foto_url} alt={contato.nome} className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700" />
                                 ) : (
-                                    <div className="flex flex-col items-center justify-center text-white/10">
-                                        <User className="w-16 h-16 mb-2" />
-                                        <span className="text-[10px] font-black uppercase tracking-widest text-white/20">Sem Foto</span>
+                                    <div className="flex flex-col items-center justify-center text-white/5">
+                                        <User className="w-20 h-20 mb-2" />
+                                        <span className="text-[10px] font-black uppercase tracking-[0.3em] font-mono">Sem Registro Visual</span>
                                     </div>
                                 )}
                                 
-                                {/* Overlay de Upload */}
+                                {/* Overlay de Upload - PREMIUM GLASS */}
                                 <div 
                                     onClick={() => {
                                         setCurrentEditId(contato.id);
                                         fileInputRef.current?.click();
                                     }}
-                                    className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center cursor-pointer backdrop-blur-sm"
+                                    className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center cursor-pointer backdrop-blur-md"
                                 >
-                                    {uploadingId === contato.id ? (
-                                        <Loader2 className="w-8 h-8 text-[secondary] animate-spin" />
-                                    ) : (
-                                        <>
-                                            <Camera className="w-8 h-8 text-[secondary] mb-2" />
-                                            <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Otimizar Foto</span>
-                                        </>
-                                    )}
+                                    <div className="bg-black/40 p-6 rounded-[2rem] border border-white/10 flex flex-col items-center gap-3 hover:scale-110 transition-transform">
+                                        {uploadingId === contato.id ? (
+                                            <Loader2 className="w-8 h-8 text-secondary animate-spin" />
+                                        ) : (
+                                            <>
+                                                <Camera className="w-8 h-8 text-secondary" />
+                                                <span className="text-[10px] font-black text-white uppercase tracking-[0.2em] font-mono">Atualizar Imagem</span>
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
 
-                                <div className="absolute top-4 left-4 bg-[secondary] text-[primary] text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest pointer-events-none">
-                                    {contato.departamento}
+                                <div className="absolute top-6 left-8 bg-secondary text-primary text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-glow">
+                                    {contato.departamento || 'OPERACIONAL'}
                                 </div>
                             </div>
 
-                            {/* Conteúdo */}
-                            <div className="p-8">
-                                <div className="flex flex-col gap-4">
-                                    <div className="flex flex-col gap-1">
-                                        <label className="text-[10px] uppercase tracking-widest text-white/30 font-black">Nome Completo</label>
-                                        <div className="relative">
+                            {/* Conteúdo - CLEAN & PRECISE */}
+                            <div className="p-8 flex-1 flex flex-col gap-6">
+                                <div className="flex flex-col gap-5">
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-[10px] uppercase tracking-widest text-white/30 font-black font-mono">Nome Completo</label>
+                                        <div className="relative group/input">
                                             <input
                                                 id={`nome-${contato.id}`}
-                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-10 py-2 text-white font-bold focus:border-[secondary] outline-none text-sm transition-colors"
+                                                className="w-full bg-white/5 border border-white/10 rounded-2xl px-12 py-4 text-white font-black text-lg focus:border-secondary focus:bg-white/10 outline-none transition-all"
                                                 defaultValue={contato.nome}
                                             />
-                                            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                                            <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/10 group-focus-within/input:text-secondary transition-colors" />
                                         </div>
                                     </div>
 
-                                    <div className="flex flex-col gap-1">
-                                        <label className="text-[10px] uppercase tracking-widest text-white/30 font-black">Departamento / Cargo</label>
-                                        <div className="relative">
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-[10px] uppercase tracking-widest text-white/30 font-black font-mono">Departamento / Cargo</label>
+                                        <div className="relative group/input">
                                             <input
                                                 id={`depto-${contato.id}`}
-                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-10 py-2 text-white/70 focus:border-[secondary] outline-none text-sm transition-colors font-medium"
+                                                className="w-full bg-white/5 border border-white/10 rounded-2xl px-12 py-4 text-white/70 focus:border-secondary focus:bg-white/10 outline-none text-sm font-medium transition-all"
                                                 defaultValue={contato.departamento}
                                             />
-                                            <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                                            <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/10 group-focus-within/input:text-secondary transition-colors" />
                                         </div>
                                     </div>
 
-                                    <div className="flex flex-col gap-1">
-                                        <label className="text-[10px] uppercase tracking-widest text-white/30 font-black">WhatsApp (com DDD)</label>
-                                        <div className="relative">
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-[10px] uppercase tracking-widest text-white/30 font-black font-mono">WhatsApp (Bypass Direto)</label>
+                                        <div className="relative group/input">
                                             <input
                                                 id={`tel-${contato.id}`}
-                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-10 py-2 text-[secondary] font-black focus:border-[secondary] outline-none text-sm transition-colors"
+                                                className="w-full bg-white/5 border border-white/10 rounded-2xl px-12 py-4 text-secondary font-black font-mono focus:border-secondary focus:bg-white/10 outline-none text-sm transition-all"
                                                 defaultValue={contato.telefone}
                                             />
-                                            <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                                            <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/10 group-focus-within/input:text-secondary transition-colors" />
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div className="grid grid-cols-2 gap-3 mt-4">
-                                        <button 
-                                            onClick={() => {
-                                                const n = (document.getElementById(`nome-${contato.id}`) as HTMLInputElement).value;
-                                                const d = (document.getElementById(`depto-${contato.id}`) as HTMLInputElement).value;
-                                                const t = (document.getElementById(`tel-${contato.id}`) as HTMLInputElement).value;
-                                                handleSave(contato.id, { nome: n, departamento: d, telefone: t });
-                                            }}
-                                            className="flex items-center justify-center gap-2 bg-[secondary] hover:brightness-110 text-[primary] font-black py-3 rounded-xl transition-all text-xs shadow-lg"
-                                        >
-                                            {savingId === contato.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
-                                            Salvar Dados
-                                        </button>
+                                <div className="grid grid-cols-2 gap-4 mt-auto">
+                                    <button 
+                                        onClick={() => {
+                                            const n = (document.getElementById(`nome-${contato.id}`) as HTMLInputElement).value;
+                                            const d = (document.getElementById(`depto-${contato.id}`) as HTMLInputElement).value;
+                                            const t = (document.getElementById(`tel-${contato.id}`) as HTMLInputElement).value;
+                                            handleSave(contato.id, { nome: n, departamento: d, telefone: t });
+                                        }}
+                                        className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 text-white/80 font-black py-4 rounded-2xl transition-all border border-white/10 group/save"
+                                    >
+                                        {savingId === contato.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4 group-hover/save:text-secondary transition-colors" />}
+                                        Salvar
+                                    </button>
 
-                                        <button
-                                            onClick={() => confirmDelete(contato.id)}
-                                            className="flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 font-bold py-3 rounded-xl transition-all border border-red-500/20 text-xs"
-                                        >
-                                            <Trash2 className="w-3 h-3" /> Excluir
-                                        </button>
-                                    </div>
+                                    <button
+                                        onClick={() => confirmDelete(contato.id)}
+                                        className="flex items-center justify-center gap-3 bg-red-500/5 hover:bg-red-500 text-white font-black py-4 rounded-2xl transition-all border border-red-500/10 shadow-lg group/del"
+                                    >
+                                        <Trash2 className="w-4 h-4 group-hover/del:scale-110 transition-transform" /> Excluir
+                                    </button>
                                 </div>
                             </div>
                         </div>

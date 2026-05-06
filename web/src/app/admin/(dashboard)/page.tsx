@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { Mail } from 'lucide-react'
+import { Mail, Image as ImageIcon } from 'lucide-react'
 
 export default async function AdminDashboard() {
     const supabase = await createClient()
@@ -16,93 +16,101 @@ export default async function AdminDashboard() {
 
     return (
         <div className="animate-fade-in-up mt-8">
-            <h1 className="text-4xl font-plus-jakarta font-medium text-white mb-2">Painel de <strong className="font-black text-[secondary]">Gestão</strong></h1>
-            <p className="text-white/50 mb-12">Configure os depoimentos, métricas de atuação, malhas geográficas e gestão de leads.</p>
+            <header className="mb-12">
+                <h1 className="text-4xl md:text-5xl font-black text-white mb-3 tracking-tight">
+                    Painel de <span className="text-secondary drop-shadow-[0_0_15px_rgba(162,225,37,0.3)]">Gestão</span>
+                </h1>
+                <p className="text-white/50 text-lg font-medium max-w-2xl">
+                    Bem-vindo ao centro de comando operacional do Grupo Portilho. Gerencie infraestrutura, métricas e conexões.
+                </p>
+            </header>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-                {/* Card: Mensagens / Leads */}
-                <div className="bg-[#0b2545] border border-[secondary]/20 rounded-3xl p-8 shadow-2xl flex flex-col justify-between hover:scale-[1.02] transition-all relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <Mail className="w-20 h-20 text-[secondary]" />
+                {/* Card: Mensagens / Leads - HIGHLIGHTED */}
+                <div className="glass-card premium-border rounded-[2.5rem] p-8 shadow-premium flex flex-col justify-between hover:scale-[1.02] transition-all duration-300 group">
+                    <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <Mail className="w-24 h-24 text-secondary" />
                     </div>
                     <div className="relative z-10">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center border border-secondary/20">
+                                <Mail className="w-5 h-5 text-secondary" />
+                            </div>
+                            <span className="text-[10px] uppercase tracking-widest font-black text-secondary">Comunicação</span>
+                        </div>
                         <h3 className="text-2xl font-black mb-2 text-white">Leads e Mensagens</h3>
-                        <p className="text-white/50 text-sm mb-6">Veja quem entrou em contato pelo site, emails recebidos e status das conversas.</p>
+                        <p className="text-white/40 text-sm mb-8 leading-relaxed">Gestão centralizada de contatos, propostas e histórico de interações B2B.</p>
                     </div>
-                    <Link href="/admin/mensagens" className="w-full py-4 bg-[secondary] text-[primary] text-center font-black rounded-xl relative z-10">Ver Mensagens</Link>
+                    <Link href="/admin/mensagens" className="w-full py-4 bg-secondary text-primary text-center font-black rounded-2xl hover:shadow-glow transition-all">Ver Mensagens</Link>
                 </div>
 
-                {/* Card: Depoimentos */}
-                <div className="bg-[primary] border border-white/5 rounded-3xl p-8 shadow-2xl flex flex-col justify-between hover:border-[secondary]/20 transition-colors">
-                    <div>
-                        <h3 className="text-xl font-bold mb-2">Depoimentos</h3>
-                        <p className="text-white/50 text-sm mb-6">Aprovar ou adicionar avaliações de clientes.</p>
+                {/* Card: Galeria - HIGHLIGHTED */}
+                <div className="glass-card premium-border rounded-[2.5rem] p-8 shadow-premium flex flex-col justify-between hover:scale-[1.02] transition-all duration-300 group">
+                    <div className="relative z-10">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center border border-secondary/20">
+                                <ImageIcon className="w-5 h-5 text-secondary" />
+                            </div>
+                            <span className="text-[10px] uppercase tracking-widest font-black text-secondary">Mídia & Eventos</span>
+                        </div>
+                        <h3 className="text-2xl font-black mb-2 text-white">Galerias e Álbuns</h3>
+                        <p className="text-white/40 text-sm mb-8 leading-relaxed">Acervo visual de infraestrutura, safras e eventos corporativos.</p>
                     </div>
-                    <Link href="/admin/depoimentos" className="w-full py-3 bg-white/5 hover:bg-white/10 text-white text-center font-bold rounded-xl transition-colors">Gerenciar</Link>
+                    <Link href="/admin/galeria" className="w-full py-4 bg-secondary text-primary text-center font-black rounded-2xl hover:shadow-glow transition-all">Gerenciar Álbuns</Link>
+                </div>
+
+                {/* Card: Contatos Diretos - HIGHLIGHTED */}
+                <div className="glass-card premium-border rounded-[2.5rem] p-8 shadow-premium flex flex-col justify-between hover:scale-[1.02] transition-all duration-300 group">
+                    <div className="relative z-10">
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center border border-secondary/20">
+                                <span className="font-black text-secondary text-xs">GP</span>
+                            </div>
+                            <span className="text-[10px] uppercase tracking-widest font-black text-secondary">Capital Humano</span>
+                        </div>
+                        <h3 className="text-2xl font-black mb-2 text-white">Contatos Diretos</h3>
+                        <p className="text-white/40 text-sm mb-8 leading-relaxed">Administração da equipe de especialistas e canais diretos de atendimento.</p>
+                    </div>
+                    <Link href="/admin/contatos" className="w-full py-4 bg-secondary text-primary text-center font-black rounded-2xl hover:shadow-glow transition-all">Gerenciar Equipe</Link>
                 </div>
 
                 {/* Card: KPIs */}
-                <div className="bg-[primary] border border-white/5 rounded-3xl p-8 shadow-2xl flex flex-col justify-between hover:border-[secondary]/20 transition-colors">
+                <div className="bg-surface/50 border border-white/5 rounded-[2.5rem] p-8 flex flex-col justify-between hover:border-secondary/20 transition-all duration-300">
                     <div>
-                        <h3 className="text-xl font-bold mb-2">Métricas e KPIs</h3>
-                        <p className="text-white/50 text-sm mb-6">Atualize os valores de Safra, Áreas de Cobertura e dados operacionais de infraestrutura.</p>
+                        <h3 className="text-xl font-bold mb-2 text-white">Métricas e KPIs</h3>
+                        <p className="text-white/40 text-sm mb-6">Valores de Safra e dados operacionais.</p>
                     </div>
-                    <Link href="/admin/kpis" className="w-full py-4 bg-[secondary] text-[primary] text-center font-bold rounded-xl hover:scale-[1.02] transition-transform">Gerenciar Métricas</Link>
+                    <Link href="/admin/kpis" className="w-full py-3 bg-white/5 hover:bg-white/10 text-white/70 text-center font-bold rounded-xl transition-colors">Gerenciar</Link>
                 </div>
 
                 {/* Card: Mapas */}
-                <div className="bg-[primary] border border-white/5 rounded-3xl p-8 shadow-2xl flex flex-col justify-between hover:border-[secondary]/20 transition-colors">
+                <div className="bg-surface/50 border border-white/5 rounded-[2.5rem] p-8 flex flex-col justify-between hover:border-secondary/20 transition-all duration-300">
                     <div>
-                        <h3 className="text-xl font-bold mb-2">Cartografia (Lugares)</h3>
-                        <p className="text-white/50 text-sm mb-6">Adicione novas fazendas ou matrizes com Latitude e Longitude para pinar no Mapa.</p>
+                        <h3 className="text-xl font-bold mb-2 text-white">Cartografia</h3>
+                        <p className="text-white/40 text-sm mb-6">Fazendas, matrizes e geolocalização.</p>
                     </div>
-                    <Link href="/admin/mapa" className="w-full py-4 bg-[secondary] text-[primary] text-center font-bold rounded-xl hover:scale-[1.02] transition-transform">Gerenciar Mapa</Link>
+                    <Link href="/admin/mapa" className="w-full py-3 bg-white/5 hover:bg-white/10 text-white/70 text-center font-bold rounded-xl transition-colors">Gerenciar</Link>
+                </div>
+
+                {/* Card: Depoimentos */}
+                <div className="bg-surface/50 border border-white/5 rounded-[2.5rem] p-8 flex flex-col justify-between hover:border-secondary/20 transition-all duration-300">
+                    <div>
+                        <h3 className="text-xl font-bold mb-2 text-white">Depoimentos</h3>
+                        <p className="text-white/40 text-sm mb-6">Gestão de provas sociais e avaliações.</p>
+                    </div>
+                    <Link href="/admin/depoimentos" className="w-full py-3 bg-white/5 hover:bg-white/10 text-white/70 text-center font-bold rounded-xl transition-colors">Gerenciar</Link>
                 </div>
 
                 {/* Card: Configurações Globais */}
-                <div className="bg-[primary] border border-white/5 rounded-3xl p-8 shadow-2xl flex flex-col justify-between hover:border-[secondary]/20 transition-colors">
+                <div className="bg-surface/50 border border-white/5 rounded-[2.5rem] p-8 flex flex-col justify-between hover:border-secondary/20 transition-all duration-300">
                     <div>
-                        <h3 className="text-xl font-bold mb-2">Configurações Gerais</h3>
-                        <p className="text-white/50 text-sm mb-6">Dados de rodapé, WhatsApp e endereços.</p>
+                        <h3 className="text-xl font-bold mb-2 text-white text-white/50">Configurações</h3>
+                        <p className="text-white/30 text-sm mb-6 italic">Gerais e SMTP.</p>
                     </div>
-                    <Link href="/admin/config" className="w-full py-3 bg-white/5 hover:bg-white/10 text-white text-center font-bold rounded-xl transition-colors">Configurar</Link>
-                </div>
-
-                {/* Card: SMTP */}
-                <div className="bg-[primary] border border-white/5 rounded-3xl p-8 shadow-2xl flex flex-col justify-between hover:border-[secondary]/20 transition-colors">
-                    <div>
-                        <h3 className="text-xl font-bold mb-2">E-mail (SMTP)</h3>
-                        <p className="text-white/50 text-sm mb-6">Configurações de disparo e notificações.</p>
+                    <div className="flex gap-3">
+                        <Link href="/admin/config" className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-white/50 text-center font-bold rounded-xl transition-colors">Geral</Link>
+                        <Link href="/admin/smtp" className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-white/50 text-center font-bold rounded-xl transition-colors">SMTP</Link>
                     </div>
-                    <Link href="/admin/smtp" className="w-full py-3 bg-white/5 hover:bg-white/10 text-white text-center font-bold rounded-xl transition-colors">Configurar SMTP</Link>
-                </div>
-
-                {/* Card: Galeria */}
-                <div className="bg-[#0b2545] border border-[secondary]/20 rounded-3xl p-8 shadow-2xl flex flex-col justify-between hover:scale-[1.02] transition-all relative overflow-hidden group">
-                    <div className="relative z-10">
-                        <h3 className="text-2xl font-black mb-2 text-white">Galerias e Álbuns</h3>
-                        <p className="text-white/50 text-sm mb-6">Crie álbuns de eventos, festas de safra e aniversários. Gerencie fotos e capas.</p>
-                    </div>
-                    <Link href="/admin/galeria" className="w-full py-4 bg-[secondary] text-[primary] text-center font-black rounded-xl relative z-10">Gerenciar Álbuns</Link>
-                </div>
-
-                {/* Card: Parceiros */}
-                <div className="bg-[primary] border border-white/5 rounded-3xl p-8 shadow-2xl flex flex-col justify-between hover:border-[secondary]/20 transition-colors">
-                    <div>
-                        <h3 className="text-xl font-bold mb-2">Parceiros de Produção</h3>
-                        <p className="text-white/50 text-sm mb-6">Gerencie as logos das empresas parceiras exibidas no site.</p>
-                    </div>
-                    <Link href="/admin/parceiros" className="w-full py-3 bg-white/5 hover:bg-white/10 text-white text-center font-bold rounded-xl transition-colors">Gerenciar Parceiros</Link>
-                </div>
-
-                {/* Card: Contatos Diretos */}
-                <div className="bg-[#0b2545] border border-[secondary]/20 rounded-3xl p-8 shadow-2xl flex flex-col justify-between hover:scale-[1.02] transition-all relative overflow-hidden group">
-                    <div className="relative z-10">
-                        <h3 className="text-2xl font-black mb-2 text-white">Contatos Diretos</h3>
-                        <p className="text-white/50 text-sm mb-6">Adicione especialistas, vendedores e gestores com foto e WhatsApp direto para os clientes.</p>
-                    </div>
-                    <Link href="/admin/contatos" className="w-full py-4 bg-[secondary] text-[primary] text-center font-black rounded-xl relative z-10">Gerenciar Equipe</Link>
                 </div>
             </div>
         </div>

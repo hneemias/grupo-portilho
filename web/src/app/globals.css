@@ -1,33 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @theme inline {
-  --color-surface: #fff8f5;
-  --color-surface-container-low: #fff1e8;
-  --color-surface-container-lowest: #ffffff;
-  --color-surface-container-highest: #f3dfd0;
-  
+  --font-plus-jakarta: "Plus Jakarta Sans", sans-serif;
+  --font-fira-sans: "Fira Sans", sans-serif;
+  --font-fira-code: "Fira Code", monospace;
+
   --color-primary: #204695;
-  --color-primary-container: #1d4498;
-  --color-on-primary: #ffffff;
-  
   --color-secondary: #a2e125;
-  --color-secondary-container: #a2e125;
-  --color-secondary-fixed: #a2e125;
-  
-  --color-on-surface: #241a11;
-  --color-on-surface-variant: #444652;
-  --color-outline-variant: #c4c6d3;
+  --color-background: #031428;
+  --color-surface: #020b1a;
 
-  --font-plus-jakarta: var(--font-plus-jakarta-sans);
-  --font-inter: var(--font-inter);
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2.5rem;
 
-  --shadow-ambient: 0px 24px 48px rgba(36, 26, 17, 0.06);
+  --shadow-premium: 0 20px 50px -12px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(162, 225, 37, 0.15);
+}
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 3, 20, 40;
+  --background-end-rgb: 2, 11, 26;
 }
 
 body {
-  background: var(--color-surface);
-  color: var(--color-on-surface);
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-fira-sans);
+  background-color: var(--color-background);
+  color: white;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-plus-jakarta);
+  letter-spacing: -0.02em;
+}
+
+.font-mono {
+  font-family: var(--font-fira-code);
 }
 
 @keyframes scroll {
@@ -43,4 +54,20 @@ body {
 
 .animate-scroll:hover {
   animation-play-state: paused;
+}
+
+/* UI PRO MAX UTILITIES */
+.glass-card {
+  background: rgba(2, 11, 26, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.premium-border {
+  border: 1px solid rgba(162, 225, 37, 0.1);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 25px rgba(162, 225, 37, 0.1);
+  border-color: rgba(162, 225, 37, 0.3);
 }

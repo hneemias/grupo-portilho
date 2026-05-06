@@ -56,12 +56,12 @@ export default function AdminDepoimentos() {
                 <Link href="/admin" className="p-2 bg-white/5 hover:bg-white/10 rounded-xl transition-colors">
                     <ArrowLeft className="w-5 h-5 text-white/50" />
                 </Link>
-                <h1 className="text-3xl font-black text-white">Gestão de <span className="text-[#a3e635]">Depoimentos</span></h1>
+                <h1 className="text-3xl font-black text-white">Gestão de <span className="text-secondary">Depoimentos</span></h1>
             </div>
 
             <button
                 onClick={addDepoimento}
-                className="mb-8 flex items-center gap-2 bg-[#a3e635] text-[#051c36] font-bold px-6 py-3 rounded-xl hover:scale-105 transition-transform"
+                className="mb-8 flex items-center gap-2 bg-secondary text-primary font-bold px-6 py-3 rounded-xl hover:scale-105 transition-transform"
             >
                 <Plus className="w-5 h-5" /> Adicionar Depoimento
             </button>
@@ -71,12 +71,12 @@ export default function AdminDepoimentos() {
             ) : (
                 <div className="grid grid-cols-1 gap-6">
                     {depoimentos.map((depo) => (
-                        <div key={depo.id} className="bg-[#051c36] border border-white/5 p-6 rounded-3xl shadow-xl group hover:border-[#a3e635]/30 transition-colors">
+                        <div key={depo.id} className="bg-primary border border-white/5 p-6 rounded-3xl shadow-xl group hover:border-secondary/30 transition-colors">
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                                 <div className="flex flex-col gap-2">
                                     <label className="text-[10px] uppercase tracking-widest text-white/30 font-black">Cliente</label>
                                     <input
-                                        className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 focus:border-[#a3e635] outline-none"
+                                        className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 focus:border-secondary outline-none"
                                         defaultValue={depo.nome}
                                         onBlur={(e) => saveDepoimento(depo.id, { nome: e.target.value })}
                                     />
@@ -84,7 +84,7 @@ export default function AdminDepoimentos() {
                                 <div className="flex flex-col gap-2">
                                     <label className="text-[10px] uppercase tracking-widest text-white/30 font-black">Cargo / Empresa</label>
                                     <input
-                                        className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 focus:border-[#a3e635] outline-none"
+                                        className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 focus:border-secondary outline-none"
                                         defaultValue={depo.papel}
                                         onBlur={(e) => saveDepoimento(depo.id, { papel: e.target.value })}
                                     />
@@ -92,7 +92,7 @@ export default function AdminDepoimentos() {
                                 <div className="flex flex-col gap-2">
                                     <label className="text-[10px] uppercase tracking-widest text-white/30 font-black">Avatar URL</label>
                                     <input
-                                        className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 focus:border-[#a3e635] outline-none"
+                                        className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 focus:border-secondary outline-none"
                                         defaultValue={depo.avatar_url}
                                         onBlur={(e) => saveDepoimento(depo.id, { avatar_url: e.target.value })}
                                     />
@@ -101,7 +101,7 @@ export default function AdminDepoimentos() {
                                     <label className="text-[10px] uppercase tracking-widest text-white/30 font-black">Estrelas (1-5)</label>
                                     <input
                                         type="number" min="1" max="5"
-                                        className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 focus:border-[#a3e635] outline-none"
+                                        className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 focus:border-secondary outline-none"
                                         defaultValue={depo.estrelas}
                                         onBlur={(e) => saveDepoimento(depo.id, { estrelas: parseInt(e.target.value) })}
                                     />
@@ -111,7 +111,7 @@ export default function AdminDepoimentos() {
                                 <label className="text-[10px] uppercase tracking-widest text-white/30 font-black">Depoimento</label>
                                 <textarea
                                     rows={3}
-                                    className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 focus:border-[#a3e635] outline-none resize-none"
+                                    className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 focus:border-secondary outline-none resize-none"
                                     defaultValue={depo.texto}
                                     onBlur={(e) => saveDepoimento(depo.id, { texto: e.target.value })}
                                 />
@@ -130,8 +130,8 @@ export default function AdminDepoimentos() {
             )}
             {/* TOAST NOTIFICATION */}
             {toastMsg && (
-                <div className="fixed bottom-8 right-8 bg-[#051c36] border border-[#a3e635] text-white px-6 py-4 rounded-2xl shadow-2xl z-[100] animate-fade-in flex items-center gap-3">
-                    <div className="w-2 h-2 bg-[#a3e635] rounded-full animate-pulse" />
+                <div className="fixed bottom-8 right-8 bg-primary border border-secondary text-white px-6 py-4 rounded-2xl shadow-2xl z-[100] animate-fade-in flex items-center gap-3">
+                    <div className="w-2 h-2 bg-secondary rounded-full animate-pulse" />
                     <span className="font-bold text-sm">{toastMsg}</span>
                 </div>
             )}

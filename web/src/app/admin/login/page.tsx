@@ -4,12 +4,10 @@ export default async function LoginPage({ searchParams }: { searchParams: { erro
     const params = await searchParams;
     return (
         <div className="flex h-screen w-full items-center justify-center bg-[#031428] font-plus-jakarta px-4">
-            <div className="w-full max-w-md p-8 rounded-3xl bg-[#051c36] shadow-2xl border border-white/5">
+            <div className="w-full max-w-md p-8 rounded-3xl bg-[#020b1a] shadow-2xl border border-white/5">
 
                 <div className="flex flex-col items-center mb-8">
-                    <div className="font-plus-jakarta font-black text-4xl text-white flex items-center gap-0 leading-none mb-2">
-                        <span className="text-[#a3e635]">G</span>P
-                    </div>
+                    <img src="/assets/img/logo_gp.png" alt="Grupo Portilho" className="h-12 w-auto mb-4" />
                     <p className="text-white/50 text-sm tracking-widest uppercase font-bold text-center">Acesso Corporativo</p>
                 </div>
 
@@ -19,7 +17,7 @@ export default async function LoginPage({ searchParams }: { searchParams: { erro
                             Email Institucional
                         </label>
                         <input
-                            className="rounded-xl px-4 py-3 bg-white/5 border border-white/10 text-white focus:outline-none focus:border-[#a3e635] transition-colors"
+                            className="rounded-xl px-4 py-3 bg-white/5 border border-white/10 text-white focus:outline-none focus:border-secondary transition-colors"
                             name="email"
                             placeholder="diretoria@grupoportilho.com.br"
                             required
@@ -31,7 +29,7 @@ export default async function LoginPage({ searchParams }: { searchParams: { erro
                             Chave de Segurança (JWT Auth)
                         </label>
                         <input
-                            className="rounded-xl px-4 py-3 bg-white/5 border border-white/10 text-white focus:outline-none focus:border-[#a3e635] transition-colors"
+                            className="rounded-xl px-4 py-3 bg-white/5 border border-white/10 text-white focus:outline-none focus:border-secondary transition-colors"
                             type="password"
                             name="password"
                             placeholder="••••••••"
@@ -41,7 +39,7 @@ export default async function LoginPage({ searchParams }: { searchParams: { erro
 
                     <button
                         formAction={login}
-                        className="bg-[#a3e635] text-[#051c36] text-lg font-bold rounded-xl px-4 py-3 mt-4 hover:scale-[1.02] transition-transform"
+                        className="bg-secondary text-primary text-lg font-bold rounded-xl px-4 py-3 mt-4 hover:scale-[1.02] transition-transform"
                     >
                         Autenticar Sessão
                     </button>

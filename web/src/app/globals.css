@@ -6,13 +6,13 @@
   --color-surface-container-lowest: #ffffff;
   --color-surface-container-highest: #f3dfd0;
   
-  --color-primary: #002d79;
+  --color-primary: #204695;
   --color-primary-container: #1d4498;
   --color-on-primary: #ffffff;
   
-  --color-secondary: #3f6900;
-  --color-secondary-container: #b4f566;
-  --color-secondary-fixed: #b4f566;
+  --color-secondary: #a2e125;
+  --color-secondary-container: #a2e125;
+  --color-secondary-fixed: #a2e125;
   
   --color-on-surface: #241a11;
   --color-on-surface-variant: #444652;

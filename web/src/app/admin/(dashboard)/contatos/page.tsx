@@ -151,12 +151,12 @@ export default function AdminContatos() {
                     <Link href="/admin" className="p-2 bg-white/5 hover:bg-white/10 rounded-xl transition-colors">
                         <ArrowLeft className="w-5 h-5 text-white/50" />
                     </Link>
-                    <h1 className="text-3xl font-black text-white">Contatos <span className="text-[#a3e635]">Diretos</span></h1>
+                    <h1 className="text-3xl font-black text-white">Contatos <span className="text-[secondary]">Diretos</span></h1>
                 </div>
 
                 <button
                     onClick={addContato}
-                    className="flex items-center gap-2 bg-[#a3e635] text-[#051c36] font-black px-8 py-4 rounded-2xl hover:scale-105 transition-all shadow-lg"
+                    className="flex items-center gap-2 bg-[secondary] text-[primary] font-black px-8 py-4 rounded-2xl hover:scale-105 transition-all shadow-lg"
                 >
                     <Plus className="w-5 h-5" /> Adicionar Pessoa
                 </button>
@@ -167,7 +167,7 @@ export default function AdminContatos() {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {contatos.map((contato) => (
-                        <div key={contato.id} className="group bg-[#041a33] border border-white/10 rounded-[2.5rem] transition-all hover:border-[#a3e635]/40 shadow-xl hover:shadow-[0_0_40px_rgba(0,0,0,0.4)] relative overflow-hidden">
+                        <div key={contato.id} className="group bg-[#041a33] border border-white/10 rounded-[2.5rem] transition-all hover:border-[secondary]/40 shadow-xl hover:shadow-[0_0_40px_rgba(0,0,0,0.4)] relative overflow-hidden">
                             {/* Preview da Foto */}
                             <div className="h-48 relative bg-[#0b2545] flex items-center justify-center overflow-hidden">
                                 {contato.foto_url ? (
@@ -188,16 +188,16 @@ export default function AdminContatos() {
                                     className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center cursor-pointer backdrop-blur-sm"
                                 >
                                     {uploadingId === contato.id ? (
-                                        <Loader2 className="w-8 h-8 text-[#a3e635] animate-spin" />
+                                        <Loader2 className="w-8 h-8 text-[secondary] animate-spin" />
                                     ) : (
                                         <>
-                                            <Camera className="w-8 h-8 text-[#a3e635] mb-2" />
+                                            <Camera className="w-8 h-8 text-[secondary] mb-2" />
                                             <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Otimizar Foto</span>
                                         </>
                                     )}
                                 </div>
 
-                                <div className="absolute top-4 left-4 bg-[#a3e635] text-[#051c36] text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest pointer-events-none">
+                                <div className="absolute top-4 left-4 bg-[secondary] text-[primary] text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest pointer-events-none">
                                     {contato.departamento}
                                 </div>
                             </div>
@@ -210,7 +210,7 @@ export default function AdminContatos() {
                                         <div className="relative">
                                             <input
                                                 id={`nome-${contato.id}`}
-                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-10 py-2 text-white font-bold focus:border-[#a3e635] outline-none text-sm transition-colors"
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-10 py-2 text-white font-bold focus:border-[secondary] outline-none text-sm transition-colors"
                                                 defaultValue={contato.nome}
                                             />
                                             <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
@@ -222,7 +222,7 @@ export default function AdminContatos() {
                                         <div className="relative">
                                             <input
                                                 id={`depto-${contato.id}`}
-                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-10 py-2 text-white/70 focus:border-[#a3e635] outline-none text-sm transition-colors font-medium"
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-10 py-2 text-white/70 focus:border-[secondary] outline-none text-sm transition-colors font-medium"
                                                 defaultValue={contato.departamento}
                                             />
                                             <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
@@ -234,7 +234,7 @@ export default function AdminContatos() {
                                         <div className="relative">
                                             <input
                                                 id={`tel-${contato.id}`}
-                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-10 py-2 text-[#a3e635] font-black focus:border-[#a3e635] outline-none text-sm transition-colors"
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-10 py-2 text-[secondary] font-black focus:border-[secondary] outline-none text-sm transition-colors"
                                                 defaultValue={contato.telefone}
                                             />
                                             <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
@@ -249,7 +249,7 @@ export default function AdminContatos() {
                                                 const t = (document.getElementById(`tel-${contato.id}`) as HTMLInputElement).value;
                                                 handleSave(contato.id, { nome: n, departamento: d, telefone: t });
                                             }}
-                                            className="flex items-center justify-center gap-2 bg-[#a3e635] hover:brightness-110 text-[#051c36] font-black py-3 rounded-xl transition-all text-xs shadow-lg"
+                                            className="flex items-center justify-center gap-2 bg-[secondary] hover:brightness-110 text-[primary] font-black py-3 rounded-xl transition-all text-xs shadow-lg"
                                         >
                                             {savingId === contato.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
                                             Salvar Dados

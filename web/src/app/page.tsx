@@ -18,7 +18,8 @@ import {
   CheckCircle2,
   Sparkles,
   Zap,
-  ShieldCheck
+  ShieldCheck,
+  User
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { createClient } from '@/lib/supabase/client';
@@ -30,6 +31,7 @@ export default function Home() {
   const [activeAlbumIndex, setActiveAlbumIndex] = useState(0);
   const [albuns, setAlbuns] = useState<any[]>([]);
   const [parceiros, setParceiros] = useState<any[]>([]);
+  const [contatos, setContatos] = useState<any[]>([]);
   const [formSubmitting, setFormSubmitting] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
@@ -159,6 +161,17 @@ export default function Home() {
 
       if (parceirosData) {
         setParceiros(parceirosData);
+      }
+
+      // Fetch Contatos
+      const { data: contatosData } = await supabase
+        .from('gp_contatos')
+        .select('*')
+        .eq('is_ativo', true)
+        .order('ordem', { ascending: true });
+
+      if (contatosData) {
+        setContatos(contatosData);
       }
     };
 
@@ -760,7 +773,62 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SECTION: FALE COM UM ESPECIALISTA */}
+      {/* SECTION: FALE COM UM ESPECIALISTA (KEY PEOPLE) */}
+      {contatos.length > 0 && (
+        <section className="w-full bg-[#f8f6f0] py-24 px-8 lg:px-16 overflow-hidden">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <span className="text-[#a3e635] font-black uppercase tracking-[0.3em] text-[10px] block mb-4">Atendimento Direto</span>
+              <h3 className="text-4xl lg:text-5xl font-black text-[#031d38] font-plus-jakarta mb-6">Fale com nossos <span className="text-[#a3e635]">Especialistas</span></h3>
+              <p className="text-[#031d38]/60 font-medium max-w-2xl mx-auto italic">
+                "Nossa equipe está pronta para oferecer suporte técnico e comercial de alto nível."
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {contatos.map((contato) => (
+                <div key={contato.id} className="group relative bg-white rounded-[2.5rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_70px_rgba(0,0,0,0.1)] transition-all duration-500 hover:-translate-y-3">
+                  {/* Foto com Overlay Gradiente */}
+                  <div className="aspect-[4/5] relative overflow-hidden bg-[#031d38]">
+                    {contato.foto_url ? (
+                      <img 
+                        src={contato.foto_url} 
+                        alt={contato.nome} 
+                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <User className="w-20 h-20 text-white/10" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#031d38] via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                  </div>
+
+                  {/* Informações */}
+                  <div className="p-8 text-center relative z-10">
+                    <span className="bg-[#a3e635]/10 text-[#a3e635] text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-3 inline-block">
+                      {contato.departamento}
+                    </span>
+                    <h4 className="text-[#031d38] text-xl font-black mb-1 font-plus-jakarta tracking-tight">
+                      {contato.nome}
+                    </h4>
+                    
+                    <a 
+                      href={`https://wa.me/${contato.telefone.replace(/\D/g, '')}`}
+                      target="_blank"
+                      className="mt-6 flex items-center justify-center gap-2 bg-[#031d38] group-hover:bg-[#a3e635] text-white group-hover:text-[#051c36] py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-lg"
+                    >
+                      <Phone className="w-4 h-4" /> Falar Agora
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* SECTION: FORMULÁRIO DE CONTATO */}
       <section id="contato" className="w-full bg-white py-24 px-8 lg:px-16 text-center border-t border-[#f8f6f0] relative z-10 px-4">
         <div className="max-w-4xl mx-auto bg-[#f8f6f0] rounded-3xl p-8 lg:p-12 shadow-2xl shadow-[#031d38]/5 border border-black/5">
           <div className="text-center mb-10">

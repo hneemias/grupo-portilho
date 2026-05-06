@@ -95,6 +95,15 @@ export default async function AdminDashboard() {
                     </div>
                     <Link href="/admin/parceiros" className="w-full py-3 bg-white/5 hover:bg-white/10 text-white text-center font-bold rounded-xl transition-colors">Gerenciar Parceiros</Link>
                 </div>
+
+                {/* Card: Contatos Diretos */}
+                <div className="bg-[#0b2545] border border-[#a3e635]/20 rounded-3xl p-8 shadow-2xl flex flex-col justify-between hover:scale-[1.02] transition-all relative overflow-hidden group">
+                    <div className="relative z-10">
+                        <h3 className="text-2xl font-black mb-2 text-white">Contatos Diretos</h3>
+                        <p className="text-white/50 text-sm mb-6">Adicione especialistas, vendedores e gestores com foto e WhatsApp direto para os clientes.</p>
+                    </div>
+                    <Link href="/admin/contatos" className="w-full py-4 bg-[#a3e635] text-[#051c36] text-center font-black rounded-xl relative z-10">Gerenciar Equipe</Link>
+                </div>
             </div>
         </div>
     )

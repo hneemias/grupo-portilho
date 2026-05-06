@@ -4,6 +4,7 @@ import { useState, useEffect, use, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { ArrowLeft, Upload, Trash2, Star, ExternalLink, Image as ImageIcon, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
+import { compressImage } from '@/lib/utils/image';
 
 export default function AdminAlbumDetalhe({ params }: { params: Promise<{ albumId: string }> }) {
     const { albumId } = use(params);
@@ -77,13 +78,16 @@ export default function AdminAlbumDetalhe({ params }: { params: Promise<{ albumI
             const fileExt = file.name.split('.').pop();
             const fileName = `${albumId}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
 
-            // 2. Upload com Retry
+            // 2. Compressão Dinâmica (NOVO!)
+            const compressedFile = await compressImage(file);
+
+            // 3. Upload com Retry
             const uploadWithRetry = async (retries = 3): Promise<string | null> => {
                 for (let attempt = 1; attempt <= retries; attempt++) {
                     try {
                         const { error: uploadError } = await supabase.storage
                             .from('galeria')
-                            .upload(fileName, file);
+                            .upload(fileName, compressedFile); // Enviando o arquivo comprimido
                         if (uploadError) throw uploadError;
                         
                         const { data: { publicUrl } } = supabase.storage

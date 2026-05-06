@@ -6,6 +6,7 @@ import { ArrowLeft, Plus, Trash2, Save, Phone, Loader2, User, Image as ImageIcon
 import Link from 'next/link';
 import Toast from '../../components/Toast';
 import ModalConfirm from '../../components/ModalConfirm';
+import { compressImage } from '@/lib/utils/image';
 
 export default function AdminContatos() {
     const [contatos, setContatos] = useState<any[]>([]);
@@ -59,17 +60,20 @@ export default function AdminContatos() {
         if (!file || !currentEditId) return;
 
         setUploadingId(currentEditId);
-        setToast({ message: 'Fazendo upload da foto...', type: 'loading' });
-
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${currentEditId}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-        const filePath = `fotos-equipe/${fileName}`;
+        setToast({ message: 'Otimizando e enviando foto...', type: 'loading' });
 
         try {
-            // Upload para o bucket 'media' ou 'contatos' (criaremos se necessário)
+            // 1. OTIMIZAÇÃO (Compressão e Redimensionamento)
+            const compressedFile = await compressImage(file, 800); // Para contato, 800px é mais que suficiente
+
+            const fileExt = compressedFile.name.split('.').pop();
+            const fileName = `${currentEditId}-${Date.now()}.${fileExt}`;
+            const filePath = `fotos-equipe/${fileName}`;
+
+            // 2. UPLOAD
             const { error: uploadError } = await supabase.storage
-                .from('galeria') // Usando o bucket galeria que já existe para simplificar, mas em pasta separada
-                .upload(filePath, file);
+                .from('galeria') 
+                .upload(filePath, compressedFile);
 
             if (uploadError) throw uploadError;
 
@@ -77,7 +81,7 @@ export default function AdminContatos() {
                 .from('galeria')
                 .getPublicUrl(filePath);
 
-            // Atualizar no banco
+            // 3. ATUALIZAÇÃO NO BANCO
             const { error: updateError } = await supabase
                 .from('gp_contatos')
                 .update({ foto_url: publicUrl })
@@ -85,11 +89,11 @@ export default function AdminContatos() {
 
             if (updateError) throw updateError;
 
-            setToast({ message: 'Foto atualizada!', type: 'success' });
+            setToast({ message: 'Foto otimizada e salva!', type: 'success' });
             fetchContatos();
         } catch (error) {
             console.error(error);
-            setToast({ message: 'Erro no upload', type: 'error' });
+            setToast({ message: 'Erro no processamento da imagem', type: 'error' });
         } finally {
             setUploadingId(null);
             setCurrentEditId(null);
@@ -188,7 +192,7 @@ export default function AdminContatos() {
                                     ) : (
                                         <>
                                             <Camera className="w-8 h-8 text-[#a3e635] mb-2" />
-                                            <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Trocar Foto</span>
+                                            <span className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Otimizar Foto</span>
                                         </>
                                     )}
                                 </div>

@@ -10,15 +10,24 @@ export default async function AdminLayout({
     children: React.ReactNode
 }) {
     const supabase = await createClient()
-
-    const profile = await getUserProfile()
+    const { data: { user } } = await supabase.auth.getUser()
     
-    if (!profile) {
-        redirect('/admin/login')
+    if (!user) redirect('/admin/login')
+
+    const { data: perfil } = await supabase
+        .from('gp_perfis')
+        .select('*')
+        .eq('id', user.id)
+        .single()
+    
+    const profile = {
+        ...user,
+        role: perfil?.role || 'normal',
+        status: perfil?.status || 'ativo'
     }
 
     if (profile.status === 'bloqueado') {
-        await logout()
+        await supabase.auth.signOut()
         redirect('/admin/login?error=blocked')
     }
 

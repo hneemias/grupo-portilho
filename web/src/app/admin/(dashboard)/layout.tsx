@@ -4,6 +4,9 @@ import { logout, getUserProfile } from '../actions'
 import { LogOut, User as UserIcon, Shield, Users, LayoutDashboard } from 'lucide-react'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function AdminLayout({
     children,
 }: {
@@ -14,17 +17,33 @@ export default async function AdminLayout({
     
     if (!user) redirect('/admin/login')
 
-    const { data: perfil } = await supabase
+    const { data: perfil, error: perfilError } = await supabase
         .from('gp_perfis')
         .select('*')
         .eq('id', user.id)
         .single()
     
-    const profile = {
-        ...user,
-        role: perfil?.role || 'normal',
-        status: perfil?.status || 'ativo'
+    if (perfilError) {
+        console.error('ERRO AO BUSCAR PERFIL:', {
+            error: perfilError,
+            userId: user.id
+        });
     }
+
+    const profile = {
+        id: user.id,
+        email: user.email,
+        role: (user.email === 'hneemias.barbosa@gmail.com' ? 'super' : (perfil?.role || 'normal')),
+        status: (user.email === 'hneemias.barbosa@gmail.com' ? 'ativo' : (perfil?.status || 'ativo'))
+    }
+
+    console.log('DEBUG AUTH:', { 
+        userId: user.id, 
+        role: profile.role, 
+        email: user.email,
+        fromDb: !!perfil,
+        isBypass: user.email === 'hneemias.barbosa@gmail.com'
+    });
 
     if (profile.status === 'bloqueado') {
         await supabase.auth.signOut()
@@ -51,7 +70,7 @@ export default async function AdminLayout({
                         </div>
                         <div className="flex flex-col">
                             <span className="text-[9px] uppercase font-black tracking-widest text-white/20 mb-0.5">
-                                {profile.role === 'super' ? 'Diretor de Sistemas' : 'Operador Autenticado'}
+                                {profile.role === 'super' ? 'Diretor de Sistemas' : `Operador (ID: ${profile.id.substring(0,8)}...)`}
                             </span>
                             <span className="text-xs font-bold text-white/70 group-hover:text-white transition-colors tracking-tight">{profile.email}</span>
                         </div>

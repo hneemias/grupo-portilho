@@ -15,7 +15,7 @@ import {
     CheckCircle2,
     FilterX
 } from 'lucide-react';
-import { getAdminUsers, toggleUserStatus } from '../../actions';
+import { getAdminUsers, toggleUserStatus, deleteUser } from '../../actions';
 
 interface AdminUser {
     id: string;

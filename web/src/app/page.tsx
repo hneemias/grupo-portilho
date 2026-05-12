@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, FormEvent, useEffect } from 'react';
+import React, { useState, FormEvent, useEffect, useRef } from 'react';
 import {
   ChevronRight,
   ChevronLeft,
@@ -45,7 +45,7 @@ export default function Home() {
     // Clean string to extract numeric value (handles formats like "+41k", "16.800", etc.)
     const numericPart = val.replace(/[^\d.,-]/g, '').replace(',', '.');
     const num = parseFloat(numericPart);
-    
+
     if (isNaN(num)) return val;
 
     // Use pt-BR for consistent premium formatting (1.234,56)
@@ -85,6 +85,18 @@ export default function Home() {
     { id: '2', nome: "Marta Nogueira", papel: "Produtora Rural", texto: "A precisão dos silos e a comunicação pontual no envio de safras mudaram o jogo para a nossa fazenda. O nível de cuidado deles com os grãos é surpreendente.", estrelas: 5, avatar: "https://i.pravatar.cc/150?u=a04258a2462d826712d" },
     { id: '3', nome: "Carlos Viana", papel: "Diretor Comercial Sementeira", texto: "Confio toda a cadeia de armazenamento ao Grupo Portilho há 4 anos. Nenhuma perda climática e uma gestão de frota absolutamente primorosa.", estrelas: 5, avatar: "https://i.pravatar.cc/150?u=a048581f4e29026701d" }
   ]);
+  const [showLeftFade, setShowLeftFade] = useState(false);
+  const [showRightFade, setShowRightFade] = useState(true);
+  const especialistasRef = useRef<HTMLDivElement>(null);
+
+  const updateScrollIndicators = () => {
+    if (especialistasRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = especialistasRef.current;
+      setShowLeftFade(scrollLeft > 20);
+      setShowRightFade(scrollLeft < scrollWidth - clientWidth - 20);
+    }
+  };
+
   const [testemunhoIndex, setTestemunhoIndex] = useState(0);
 
   // GLOBAL SETTINGS STATE
@@ -94,6 +106,13 @@ export default function Home() {
     footer_address: 'Avenida Principal, Setor Sul - Edéia - GO, 75940-000',
     wa_number: '55648485295'
   });
+
+  // UNIDADES STATE (Connected to Supabase)
+  const [unidades, setUnidades] = useState([
+    { id: 'u1', nome: "Escritório Administrativo/Logística", cidade_estado: "Gurupi - TO", endereco: "Via Primária 3, nº 437, Quadra 07, Lote 01 e 02, Loteamento Parque Agroindustrial, CEP: 77.445-520" },
+    { id: 'u2', nome: "Armazéns Unidade Matriz", cidade_estado: "Cariri - TO", endereco: "Rodovia BR-153 (Loteamento Fazenda Santo Antônio), s/nº, Gleba 06, Km 692, Lote 17 a 13-A, 3ª Etapa, Zona Rural, CEP: 77.453-000" },
+    { id: 'u3', nome: "Armazéns Unidade Filial", cidade_estado: "Gurupi - TO", endereco: "Rodovia BR-153 com Rua Melquiades Barros dos Santos, nº 4.921, Km 654, Lote 35, Gleba 07, Zona Rural, CEP: 77.402-210" }
+  ]);
 
   // FETCH SUPABASE DATA
   useEffect(() => {
@@ -187,16 +206,35 @@ export default function Home() {
       const { data: contatosData } = await supabase
         .from('gp_contatos')
         .select('*')
-        .eq('is_ativo', true)
         .order('ordem', { ascending: true });
 
       if (contatosData) {
-        setContatos(contatosData);
+        setContatos(contatosData.filter((c: any) => c.is_ativo !== false));
       }
+      // Fetch Unidades
+      const { data: unidadesData } = await supabase
+        .from('gp_unidades')
+        .select('*')
+        .order('ordem', { ascending: true });
+      if (unidadesData) setUnidades(unidadesData);
     };
 
     fetchData();
   }, []);
+
+  // Monitorar scroll dos especialistas para os fades
+  useEffect(() => {
+    const el = especialistasRef.current;
+    if (el) {
+      el.addEventListener('scroll', updateScrollIndicators);
+      // Check initial state after a small delay to ensure data is loaded
+      const timer = setTimeout(updateScrollIndicators, 1000);
+      return () => {
+        el.removeEventListener('scroll', updateScrollIndicators);
+        clearTimeout(timer);
+      };
+    }
+  }, [contatos]);
 
   // LIGHTBOX KEYBOARD NAVIGATION EFFECT
   useEffect(() => {
@@ -594,7 +632,7 @@ export default function Home() {
                 </span>
                 <h3 className="text-3xl font-black text-white mb-6">Escala e Produtividade</h3>
                 <p className="text-white/60 leading-relaxed mb-8 font-medium">
-                  Gestão estratégica de mais de <b>41 mil hectares</b> dedicados à produção de <b>Soja e Milho</b>, utilizando tecnologia de sementes e insumos de alta performance para maximizar resultados.
+                  Gestão estratégica de mais de <b>41 mil hectares</b> dedicados à produção de <b>Soja, Feijão, Milho e Algodão</b>, utilizando tecnologia de sementes e insumos de alta performance para maximizar resultados.
                 </p>
                 <div className="flex gap-4">
                   <div className="flex-1 bg-white/5 rounded-2xl p-4 border border-white/10">
@@ -804,51 +842,107 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {contatos.map((contato) => (
-                <div key={contato.id} className="group relative bg-white rounded-[2.5rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_70px_rgba(0,0,0,0.1)] transition-all duration-500 hover:-translate-y-3">
-                  {/* Foto com Overlay Gradiente */}
-                  <div className="aspect-[4/5] relative overflow-hidden bg-primary">
-                    {contato.foto_url ? (
-                      <img
-                        src={contato.foto_url}
-                        alt={contato.nome}
-                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <User className="w-20 h-20 text-white/10" />
+            <div className="relative group">
+              {/* Fade lateral para suavizar o corte */}
+              <div
+                className={`absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#f8f6f0] to-transparent z-10 pointer-events-none transition-opacity duration-300 ${showLeftFade ? 'opacity-100' : 'opacity-0'}`}
+              />
+              <div
+                className={`absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#f8f6f0] to-transparent z-10 pointer-events-none transition-opacity duration-300 ${showRightFade ? 'opacity-100' : 'opacity-0'}`}
+              />
+
+              {/* Botões de Navegação */}
+              <button
+                onClick={() => {
+                  if (especialistasRef.current) especialistasRef.current.scrollBy({ left: -400, behavior: 'smooth' });
+                }}
+                className={`absolute -left-4 lg:-left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white text-primary rounded-full flex items-center justify-center shadow-xl transition-all border border-black/5 hover:bg-secondary ${showLeftFade ? 'opacity-0 group-hover:opacity-100' : 'opacity-0 pointer-events-none'}`}
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+
+              <div
+                id="especialistas-container"
+                ref={especialistasRef}
+                className="flex gap-8 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-12 px-4"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {contatos.map((contato) => (
+                  <div
+                    key={contato.id}
+                    className="flex-shrink-0 w-[280px] md:w-[320px] snap-center group/card relative bg-white rounded-[2.5rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_70px_rgba(0,0,0,0.1)] transition-all duration-500 hover:-translate-y-3"
+                  >
+                    {/* Foto com Overlay Gradiente */}
+                    <div className="aspect-[4/5] relative overflow-hidden bg-primary">
+                      {contato.foto_url ? (
+                        <img
+                          src={contato.foto_url}
+                          alt={contato.nome}
+                          className="w-full h-full object-cover grayscale group-hover/card:grayscale-0 group-hover/card:scale-110 transition-all duration-700"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <User className="w-20 h-20 text-white/10" />
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent opacity-60 group-hover/card:opacity-40 transition-opacity" />
+                    </div>
+
+                    {/* Informações */}
+                    <div className="p-8 text-center relative z-10">
+                      <span className="bg-secondary/10 text-secondary text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-3 inline-block">
+                        {contato.departamento}
+                      </span>
+                      <h4 className="text-primary text-xl font-black mb-1 font-plus-jakarta tracking-tight">
+                        {contato.nome}
+                      </h4>
+
+                      {/* Telefone/Email Visíveis condicionalmente */}
+                      <div className="min-h-[40px] flex flex-col justify-center mb-4">
+                        {contato.telefone && (
+                          <p className="text-primary/50 text-[10px] font-black tracking-widest uppercase mb-1">
+                            {contato.telefone.replace(/\D/g, '').replace(/(\d{2})(\d{2})(\d{1})(\d{4})(\d{4})/, '+$1 ($2) $3 $4-$5').replace(/(\d{2})(\d{1})(\d{4})(\d{4})/, '($1) $2 $4-$5')}
+                          </p>
+                        )}
+                        {contato.email && (
+                          <p className="text-primary/40 text-[10px] font-bold lowercase tracking-normal line-clamp-1">
+                            {contato.email}
+                          </p>
+                        )}
                       </div>
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+
+                      <div className="flex flex-col gap-3 mt-4">
+                        {contato.telefone && (
+                          <a
+                            href={`https://wa.me/${contato.telefone.replace(/\D/g, '')}`}
+                            target="_blank"
+                            className="flex items-center justify-center gap-2 bg-primary hover:bg-[#25D366] text-white py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-lg active:scale-95"
+                          >
+                            <Phone className="w-4 h-4" /> WhatsApp
+                          </a>
+                        )}
+                        {contato.email && (
+                          <a
+                            href={`mailto:${contato.email}`}
+                            className="flex items-center justify-center gap-2 bg-white border border-primary/10 hover:border-secondary text-primary py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-lg active:scale-95"
+                          >
+                            <Mail className="w-4 h-4 text-secondary" /> Enviar E-mail
+                          </a>
+                        )}
+                      </div>
+                    </div>
                   </div>
+                ))}
+              </div>
 
-                  {/* Informações */}
-                  <div className="p-8 text-center relative z-10">
-                    <span className="bg-secondary/10 text-secondary text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-3 inline-block">
-                      {contato.departamento}
-                    </span>
-                    <h4 className="text-primary text-xl font-black mb-1 font-plus-jakarta tracking-tight">
-                      {contato.nome}
-                    </h4>
-
-                    {/* Telefone Visível para leitura */}
-                    <p className="text-primary/50 text-xs font-black mb-4 tracking-widest">
-                      {contato.telefone.replace(/\D/g, '').replace(/(\d{2})(\d{2})(\d{1})(\d{4})(\d{4})/, '+$1 ($2) $3 $4-$5').replace(/(\d{2})(\d{1})(\d{4})(\d{4})/, '($1) $2 $4-$5')}
-                      {/* Caso o número venha sem o DDI 55, a máscara acima tenta ajustar */}
-                      {contato.telefone.length <= 11 && contato.telefone.replace(/(\d{2})(\d{1})(\d{4})(\d{4})/, '($1) $2 $3-$4')}
-                    </p>
-
-                    <a
-                      href={`https://wa.me/${contato.telefone.replace(/\D/g, '')}`}
-                      target="_blank"
-                      className="mt-6 flex items-center justify-center gap-2 bg-primary group-hover:bg-secondary text-white group-hover:text-primary py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-lg"
-                    >
-                      <Phone className="w-4 h-4" /> Falar Agora
-                    </a>
-                  </div>
-                </div>
-              ))}
+              <button
+                onClick={() => {
+                  if (especialistasRef.current) especialistasRef.current.scrollBy({ left: 400, behavior: 'smooth' });
+                }}
+                className={`absolute -right-4 lg:-right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white text-primary rounded-full flex items-center justify-center shadow-xl transition-all border border-black/5 hover:bg-secondary ${showRightFade ? 'opacity-0 group-hover:opacity-100' : 'opacity-0 pointer-events-none'}`}
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
             </div>
           </div>
         </section>
@@ -929,25 +1023,53 @@ export default function Home() {
               </ul>
             </div>
 
-            <div className="min-w-[200px]">
-              <h4 className="text-white font-bold mb-6 font-plus-jakarta tracking-widest text-sm uppercase">Matriz Corporativa</h4>
-              <ul className="space-y-4 text-white/60 text-sm font-medium">
-                <li className="flex items-start gap-3 group">
-                  <MapPin className="w-5 h-5 text-secondary flex-shrink-0 group-hover:scale-110 transition-transform" />
-                  <div>
-                    <span className="block text-white/90 font-bold mb-0.5">Goiás, Brasil</span>
-                    <span className="leading-relaxed whitespace-pre-line">{configs.footer_address}</span>
+            <div className="flex-1 min-w-[300px]">
+              <h4 className="text-white font-bold mb-8 font-plus-jakarta tracking-widest text-sm uppercase flex items-center gap-2">
+                <span className="w-8 h-[1px] bg-secondary/30"></span>
+                Nossas Unidades
+              </h4>
+              <div className="flex flex-col gap-8">
+                {unidades.map((unidade) => (
+                  <div key={unidade.id} className="group border-b border-white/5 last:border-0 pb-6 last:pb-0">
+                    <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6 mb-2">
+                      <div className="flex items-center gap-3">
+                        <MapPin className="w-5 h-5 text-secondary flex-shrink-0 group-hover:scale-110 transition-transform" />
+                        <h5 className="text-white font-black text-xs uppercase tracking-wider leading-tight">
+                          {unidade.nome}
+                        </h5>
+                      </div>
+                      <div className="hidden md:block w-1.5 h-1.5 rounded-full bg-secondary/30"></div>
+                      <span className="text-secondary font-bold text-[10px] uppercase tracking-widest pl-8 md:pl-0">{unidade.cidade_estado}</span>
+                    </div>
+                    <p className="text-white/40 text-[11px] leading-relaxed font-medium pl-8 group-hover:text-white/60 transition-colors max-w-3xl">
+                      {unidade.endereco}
+                    </p>
                   </div>
-                </li>
-                <li className="pt-4 flex items-center gap-4">
-                  <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-secondary hover:text-primary transition-all hover:scale-110">
-                    <span className="font-bold font-serif italic text-lg leading-none">in</span>
-                  </a>
-                  <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-secondary hover:text-primary transition-all hover:scale-110">
-                    <span className="font-bold text-lg leading-none">IG</span>
-                  </a>
-                </li>
-              </ul>
+                ))}
+              </div>
+
+               <div className="mt-12 flex items-center gap-6">
+                <a 
+                  href="https://www.instagram.com/portilhogrupo" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-secondary hover:text-primary transition-all hover:scale-110 shadow-lg group"
+                >
+                  <svg 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    className="w-5 h-5 group-hover:scale-110 transition-transform"
+                  >
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                  </svg>
+                </a>
+              </div>
             </div>
           </div>
 

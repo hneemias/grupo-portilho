@@ -179,3 +179,66 @@ export async function updateUser(userId: string, data: UserFormData) {
     revalidatePath('/admin/usuarios')
     return { success: true }
 }
+export async function getUnidades() {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+        .from('gp_unidades')
+        .select('*')
+        .order('ordem', { ascending: true })
+
+    if (error) throw error
+    return data
+}
+
+export async function createUnidade(data: any) {
+    const supabase = await createAdminClient()
+    const profile = await getUserProfile()
+    if (profile?.role !== 'super') {
+        throw new Error('Acesso negado')
+    }
+
+    const { error } = await supabase
+        .from('gp_unidades')
+        .insert(data)
+
+    if (error) return { success: false, error: error.message }
+    revalidatePath('/')
+    revalidatePath('/admin/unidades')
+    return { success: true }
+}
+
+export async function updateUnidade(id: string, data: any) {
+    const supabase = await createAdminClient()
+    const profile = await getUserProfile()
+    if (profile?.role !== 'super') {
+        throw new Error('Acesso negado')
+    }
+
+    const { error } = await supabase
+        .from('gp_unidades')
+        .update(data)
+        .eq('id', id)
+
+    if (error) return { success: false, error: error.message }
+    revalidatePath('/')
+    revalidatePath('/admin/unidades')
+    return { success: true }
+}
+
+export async function deleteUnidade(id: string) {
+    const supabase = await createAdminClient()
+    const profile = await getUserProfile()
+    if (profile?.role !== 'super') {
+        throw new Error('Acesso negado')
+    }
+
+    const { error } = await supabase
+        .from('gp_unidades')
+        .delete()
+        .eq('id', id)
+
+    if (error) return { success: false, error: error.message }
+    revalidatePath('/')
+    revalidatePath('/admin/unidades')
+    return { success: true }
+}

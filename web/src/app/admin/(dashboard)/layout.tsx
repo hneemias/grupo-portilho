@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { logout, getUserProfile } from '../actions'
-import { LogOut, User as UserIcon, Shield, Users, LayoutDashboard } from 'lucide-react'
+import { LogOut, User as UserIcon, Shield, Users, LayoutDashboard, MapPin } from 'lucide-react'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
@@ -79,9 +79,14 @@ export default async function AdminLayout({
                                 <Shield className="w-5 h-5" />
                             </Link>
                             {profile.role === 'super' && (
-                                <Link href="/admin/usuarios" title="Gestão de Operadores" className="p-3 text-white/40 hover:text-secondary hover:bg-white/5 rounded-xl transition-all">
-                                    <Users className="w-5 h-5" />
-                                </Link>
+                                <>
+                                    <Link href="/admin/usuarios" title="Gestão de Operadores" className="p-3 text-white/40 hover:text-secondary hover:bg-white/5 rounded-xl transition-all">
+                                        <Users className="w-5 h-5" />
+                                    </Link>
+                                    <Link href="/admin/unidades" title="Gestão de Unidades" className="p-3 text-white/40 hover:text-secondary hover:bg-white/5 rounded-xl transition-all">
+                                        <MapPin className="w-5 h-5" />
+                                    </Link>
+                                </>
                             )}
                         </div>
 

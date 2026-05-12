@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { ArrowLeft, Plus, Trash2, Save, Phone, Loader2, User, Image as ImageIcon, Briefcase, Upload, Camera } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, Save, Phone, Mail, Loader2, User, Image as ImageIcon, Briefcase, Upload, Camera, Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import Toast from '../../components/Toast';
 import ModalConfirm from '../../components/ModalConfirm';
@@ -41,7 +41,9 @@ export default function AdminContatos() {
         const novo = {
             nome: "Novo Consultor",
             departamento: "Comercial",
-            telefone: "55629...",
+            telefone: "",
+            email: "",
+            is_ativo: true,
             foto_url: "",
             ordem: contatos.length + 1
         };
@@ -118,20 +120,59 @@ export default function AdminContatos() {
     }
 
     async function handleSave(id: string, updates: any) {
-        if (!updates.nome?.trim()) {
+        if (updates.nome !== undefined && !updates.nome?.trim()) {
             setToast({ message: 'O nome é obrigatório!', type: 'error' });
             return;
         }
 
         setSavingId(id);
-        const { error } = await supabase.from('gp_contatos').update(updates).eq('id', id);
         
-        if (!error) {
-            setToast({ message: 'Contato atualizado!', type: 'success' });
-            setSavingId(null);
+        try {
+            // Lógica de Reordenação Inteligente em JS
+            if (updates.ordem !== undefined) {
+                const contatoAtual = contatos.find(c => c.id === id);
+                const ordemAntiga = contatoAtual?.ordem || 999;
+                const ordemNova = updates.ordem;
+
+                if (ordemNova !== ordemAntiga) {
+                    const contatosAfetados = contatos.filter(c => {
+                        if (c.id === id) return false;
+                        if (ordemNova < ordemAntiga) {
+                            // Subindo: quem está entre a nova e a antiga ganha +1
+                            return c.ordem >= ordemNova && c.ordem < ordemAntiga;
+                        } else {
+                            // Descendo: quem está entre a antiga e a nova ganha -1
+                            return c.ordem > ordemAntiga && c.ordem <= ordemNova;
+                        }
+                    });
+
+                    // Atualiza cada um que precisa ser "empurrado"
+                    const updatesPromises = contatosAfetados.map(c => {
+                        const novaOrdemProgresso = ordemNova < ordemAntiga ? c.ordem + 1 : c.ordem - 1;
+                        return supabase
+                            .from('gp_contatos')
+                            .update({ ordem: novaOrdemProgresso })
+                            .eq('id', c.id);
+                    });
+
+                    await Promise.all(updatesPromises);
+                }
+            }
+
+            // Salva o contato que disparou a ação
+            const { error } = await supabase
+                .from('gp_contatos')
+                .update(updates)
+                .eq('id', id);
+
+            if (error) throw error;
+
+            setToast({ message: 'Ordem reorganizada e salva!', type: 'success' });
             fetchContatos();
-        } else {
-            setToast({ message: 'Erro ao salvar', type: 'error' });
+        } catch (error) {
+            console.error('Erro ao salvar:', error);
+            setToast({ message: 'Erro ao reorganizar ordem.', type: 'error' });
+        } finally {
             setSavingId(null);
         }
     }
@@ -205,13 +246,25 @@ export default function AdminContatos() {
                                     </div>
                                 </div>
 
-                                <div className="absolute top-6 left-8 bg-secondary text-primary text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-glow">
-                                    {contato.departamento || 'OPERACIONAL'}
+                                <div className="absolute top-6 left-8 flex items-center gap-2">
+                                    <div className="bg-secondary text-primary text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-glow">
+                                        {contato.departamento || 'OPERACIONAL'}
+                                    </div>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleSave(contato.id, { is_ativo: !contato.is_ativo });
+                                        }}
+                                        className={`p-1.5 rounded-full transition-all ${contato.is_ativo ? 'bg-secondary text-primary' : 'bg-red-500 text-white'}`}
+                                        title={contato.is_ativo ? 'Visível no Site' : 'Oculto no Site'}
+                                    >
+                                        {contato.is_ativo ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
+                                    </button>
                                 </div>
                             </div>
 
                             {/* Conteúdo - CLEAN & PRECISE */}
-                            <div className="p-8 flex-1 flex flex-col gap-6">
+                            <div className={`p-8 flex-1 flex flex-col gap-6 ${!contato.is_ativo ? 'opacity-50 grayscale' : ''}`}>
                                 <div className="flex flex-col gap-5">
                                     <div className="flex flex-col gap-2">
                                         <label className="text-[10px] uppercase tracking-widest text-white/30 font-black font-mono">Nome Completo</label>
@@ -244,8 +297,35 @@ export default function AdminContatos() {
                                                 id={`tel-${contato.id}`}
                                                 className="w-full bg-white/5 border border-white/10 rounded-2xl px-12 py-4 text-secondary font-black font-mono focus:border-secondary focus:bg-white/10 outline-none text-sm transition-all"
                                                 defaultValue={contato.telefone}
+                                                placeholder="55629..."
                                             />
                                             <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/10 group-focus-within/input:text-secondary transition-colors" />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-[10px] uppercase tracking-widest text-white/30 font-black font-mono">E-mail Corporativo</label>
+                                        <div className="relative group/input">
+                                            <input
+                                                id={`email-${contato.id}`}
+                                                className="w-full bg-white/5 border border-white/10 rounded-2xl px-12 py-4 text-white focus:border-secondary focus:bg-white/10 outline-none text-sm font-medium transition-all"
+                                                defaultValue={contato.email}
+                                                placeholder="exemplo@grupoportilho.com.br"
+                                            />
+                                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/10 group-focus-within/input:text-secondary transition-colors" />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-[10px] uppercase tracking-widest text-white/30 font-black font-mono">Ordem de Exibição</label>
+                                        <div className="relative group/input">
+                                            <input
+                                                id={`ordem-${contato.id}`}
+                                                type="number"
+                                                className="w-full bg-white/5 border border-white/10 rounded-2xl px-12 py-4 text-secondary font-black focus:border-secondary focus:bg-white/10 outline-none text-sm transition-all"
+                                                defaultValue={contato.ordem}
+                                            />
+                                            <span className="absolute left-4 top-1/2 -translate-y-1/2 font-black text-white/10 group-focus-within/input:text-secondary text-lg">#</span>
                                         </div>
                                     </div>
                                 </div>
@@ -256,7 +336,9 @@ export default function AdminContatos() {
                                             const n = (document.getElementById(`nome-${contato.id}`) as HTMLInputElement).value;
                                             const d = (document.getElementById(`depto-${contato.id}`) as HTMLInputElement).value;
                                             const t = (document.getElementById(`tel-${contato.id}`) as HTMLInputElement).value;
-                                            handleSave(contato.id, { nome: n, departamento: d, telefone: t });
+                                            const e = (document.getElementById(`email-${contato.id}`) as HTMLInputElement).value;
+                                            const o = parseInt((document.getElementById(`ordem-${contato.id}`) as HTMLInputElement).value);
+                                            handleSave(contato.id, { nome: n, departamento: d, telefone: t, email: e, ordem: o });
                                         }}
                                         className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 text-white/80 font-black py-4 rounded-2xl transition-all border border-white/10 group/save"
                                     >
